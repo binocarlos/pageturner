@@ -13,8 +13,8 @@ var template = require('./templates/booktemplate.js');
 
 module.exports = PageTurner;
 
-var masksize = 3;
-var animtime = 500;
+var masksize = 5;
+var animtime = 2000;
 
 function setLeafTransform(elem){
   var el = elem.get(0);
@@ -157,12 +157,14 @@ PageTurner.prototype.load_page = function(index){
   }, 100);
 }
 
-PageTurner.prototype.processmask = function(leaf){
+PageTurner.prototype.processmask = function(leaf, val){
   var size = this.size;
 
+  var usemask = arguments.length==2 ? val : 0;
+
   var rect = leaf.data('side') == 'left' ? 
-    'rect(0px, ' + ((size.width/2) + masksize) + 'px, ' + (size.height) + 'px, -20px)' :
-    'rect(0px, ' + (size.width+20) + 'px, ' + (size.height) + 'px, ' + ((size.width/2)-masksize) + 'px)'
+    'rect(0px, ' + ((size.width/2) + usemask) + 'px, ' + (size.height) + 'px, -20px)' :
+    'rect(0px, ' + (size.width+20) + 'px, ' + (size.height) + 'px, ' + ((size.width/2)) + 'px)'
 
   leaf.css({
     'clip':rect
@@ -174,7 +176,7 @@ PageTurner.prototype.processmask = function(leaf){
   create an element that is one page of content masked either left or right
   
 */
-PageTurner.prototype.create_leaf = function(side, html){
+PageTurner.prototype.create_leaf = function(side, html, domask){
   var leaf = $('<div class="leaf nobackside"><div class="content nobackside">' + html + '</div></div>');
   if(this.options.pageclass){
     leaf.find('.content').addClass(this.options.pageclass);
@@ -185,14 +187,17 @@ PageTurner.prototype.create_leaf = function(side, html){
 }
 
 PageTurner.prototype.create_double_leaf = function(beforehtml, afterhtml){
-  var beforeleaf = this.create_leaf('right', beforehtml);
-  var afterleaf = this.create_leaf('left', afterhtml);
+  var beforeleaf = this.create_leaf('right', beforehtml, true);
+  var afterleaf = this.create_leaf('left', afterhtml, true);
   beforeleaf.addClass('beforeleaf');
   afterleaf.addClass('afterleaf');
   var double_leaf = $('<div class="leafholder maintain3d"></div>');  
+  var edge = $('<div class="nobackside leafedge"></div>');  
   double_leaf.width(this.size.width).height(this.size.height);
   double_leaf.append(afterleaf).append(beforeleaf);
+  double_leaf.append(edge);
   setRotation(beforeleaf, 180);
+  setRotation(edge, -90);
   return double_leaf;
 }
 
@@ -235,16 +240,21 @@ PageTurner.prototype.animate_direction = function(direction){
   var leaf = this['leaf' + side];
   var otherleaf = this['leaf' + (side=='left' ? 'right' : 'left')];
   
+  leaf.find('.leaf').each(function(){
+    self.processmask($(this), 3);
+  })
+  
   if(side=='left'){
     otherleaf.css({
       'z-index':0
     })
-    
     leaf.css({
       'z-index':1
     })
+    setZ(leaf, -1);
     setZ(otherleaf, 1);
   }
+  
 
   setAnimationTime(leaf, animtime);
   setRotation(leaf, side=='left' ? 180 : 0);
