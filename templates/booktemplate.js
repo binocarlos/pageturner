@@ -1,0 +1,1 @@
+module.exports = '<div class="pageturner-book">\n	<div id="base">\n\n	</div>\n	<div id="leaves">\n\n	</div>\n</div>';
