@@ -16,9 +16,6 @@
   "styles": [
     "pageturner.css"
   ],
-  "templates": [
-    "templates/*.html"
-  ],
   "scripts": [
     "index.js",
     "templates/booktemplate.js"
