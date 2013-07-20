@@ -20,6 +20,10 @@
       background: #fff;
     }
 
+    .bookpage{
+      background-color:#fff;
+    }
+
   </style>
 </head>
 <body>
@@ -45,7 +49,14 @@
 
     $(function(){
       var PageTurner = require('pageturner');
-      var book = new PageTurner('#book', '.page');
+      var book = new PageTurner({
+        bookselector:'#book',
+        pageselector:'.page',
+        startpage:1,
+        pageclass:'bookpage'
+      });
+
+      book.render();
 
     })
     

@@ -30,17 +30,39 @@ function setRotation(elem, amount){
   }
 }
 
-function PageTurner(bookselector, pageselector){
-  if (!(this instanceof PageTurner)) return new PageTurner(bookselector, pageselector);
-  Emitter.call(this);
+function PageTurner(options){
+  options = this.options = options || {};
+
+  if (!(this instanceof PageTurner)) return new PageTurner(options);
+
   var self = this;
+  Emitter.call(this);
 
   this.page_html = [];
   this.currentpage = 0;
 
-  this.book = $(bookselector);
+  this.book = $(this.options.bookselector);
 
-  this.book.find(pageselector).each(function(i){
+  if(this.book.length<=0){
+    throw new Error('pageturner cannot find the element for the book');
+  }
+}
+
+/**
+ * Inherit from `Emitter.prototype`.
+ */
+
+PageTurner.prototype = new Emitter;
+
+PageTurner.prototype.render = function(){
+  var self = this;
+  var pages = this.book.find(this.options.pageselector);
+
+  if(pages.length<=0){
+    throw new Error('pageturner cannot find any pages for the book');
+  }
+
+  pages.each(function(i){
     self.page_html.push($(this).html());
   })
 
@@ -54,15 +76,10 @@ function PageTurner(bookselector, pageselector){
   });
 
   this.resize();
-  this.load_page(1);
+  this.load_page(this.options.startpage || 0);
+
+  this.base.hide();
 }
-
-/**
- * Inherit from `Emitter.prototype`.
- */
-
-PageTurner.prototype = new Emitter;
-
 
 PageTurner.prototype.resize = function(){
   this.size = {
@@ -96,14 +113,10 @@ PageTurner.prototype.load_page = function(index){
   var existingbase = this.base.find('> div');
   var existingleaves = this.leaves.find('> div');
 
-  //this.base.append(baseleft).append(baseright);
+  this.base.append(baseleft).append(baseright);
   this.leaves.append(leafleft);//.append(leafright);
 
-  console.log('-------------------------------------------');
-  console.dir(leafleft);
-  //setRotation(leafleft.find('.beforeleaf'), 20);
-  setRotation(leafleft.find('.afterleaf'), -30);
-  setRotation(leafleft, 30);
+  setRotation(leafleft, 10);
 
   this.book.find('.leaf').each(function(){
     self.processmask($(this));
@@ -133,7 +146,10 @@ PageTurner.prototype.processmask = function(leaf){
   
 */
 PageTurner.prototype.create_leaf = function(side, html){
-  var leaf = $('<div class="leaf"><div class="content">' + html + '</div></div>');
+  var leaf = $('<div class="leaf nobackside"><div class="content">' + html + '</div></div>');
+  if(this.options.pageclass){
+    leaf.find('.content').addClass(this.options.pageclass);
+  }
   leaf.data('side', side);
   leaf.width(this.size.width).height(this.size.height);
   return leaf;
@@ -144,9 +160,10 @@ PageTurner.prototype.create_double_leaf = function(beforehtml, afterhtml){
   var afterleaf = this.create_leaf('left', afterhtml);
   beforeleaf.addClass('beforeleaf');
   afterleaf.addClass('afterleaf');
-  var double_leaf = $('<div class="leafholder maintain3d"></div>');  
+  var double_leaf = $('<div class="leafholder maintain3d nobackside"></div>');  
   double_leaf.width(this.size.width).height(this.size.height);
-  double_leaf.append(beforeleaf).append(afterleaf);
+  double_leaf.append(afterleaf).append(beforeleaf);
+  setRotation(beforeleaf, 180);
   return double_leaf;
 }
 
