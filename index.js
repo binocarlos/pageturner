@@ -13,7 +13,7 @@ var template = require('./templates/booktemplate.js');
 
 module.exports = PageTurner;
 
-var masksize = 5;
+var masksize = 3;
 var animtime = 2000;
 
 function setLeafTransform(elem){
@@ -142,8 +142,13 @@ PageTurner.prototype.load_page = function(index){
   var existingbase = this.base.find('> div');
   var existingleaves = this.leaves.find('> div');
 
-  this.base.append(this.baseleft).append(this.baseright);
-  this.leaves.append(this.leafleft).append(this.leafright);
+  this.baseright.hide();
+  this.baseleft.hide();
+  this.leafright.hide();
+  this.leafleft.hide();
+
+  this.base.prepend(this.baseright).prepend(this.baseleft);
+  this.leaves.prepend(this.leafright).prepend(this.leafleft);
 
   setRotation(this.leafright, 180);
 
@@ -152,9 +157,18 @@ PageTurner.prototype.load_page = function(index){
   })
 
   setTimeout(function(){
-    existingbase.remove();
-    existingleaves.remove();
-  }, 100);
+    existingbase.fadeOut(500, function(){
+      existingbase.remove();
+    });
+    existingleaves.fadeOut(500, function(){
+      existingleaves.remove();
+    });
+    self.baseright.show();
+    self.baseleft.show();
+    self.leafright.show();
+    self.leafleft.show();
+    self.active = true;
+  }, 500);
 }
 
 PageTurner.prototype.processmask = function(leaf, val){
@@ -230,18 +244,28 @@ PageTurner.prototype.set_leaf_rotation = function(side, percent){
 */
 PageTurner.prototype.animate_direction = function(direction){
   var self = this;
+  if(!self.active){
+    return;
+  }
+  
   var nextpage = this.currentpage + direction;
 
   if(nextpage<0 || nextpage>=this.page_html.length){
     return;
   }
 
+  self.active = false;
+
   var side = direction<0 ? 'left' : 'right';
+  var otherside = (side=='left' ? 'right' : 'left');
   var leaf = this['leaf' + side];
-  var otherleaf = this['leaf' + (side=='left' ? 'right' : 'left')];
+  var otherleaf = this['leaf' + otherside];
+
+
+
   
   leaf.find('.leaf').each(function(){
-    self.processmask($(this), 3);
+    self.processmask($(this), masksize);
   })
   
   if(side=='left'){
@@ -253,6 +277,11 @@ PageTurner.prototype.animate_direction = function(direction){
     })
     setZ(leaf, -1);
     setZ(otherleaf, 1);
+
+    self.processmask(this['baseleft'], masksize);
+  }
+  else{
+    self.processmask(this['baseright'], masksize);
   }
   
 
