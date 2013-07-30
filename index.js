@@ -13,62 +13,27 @@ var template = require('./templates/booktemplate.js');
 
 module.exports = PageTurner;
 
-var masksize = 3;
-var animtime = 2000;
-
-function setLeafTransform(elem){
-  var el = elem.get(0);
-
-  var rotation = elem.data('rot') || 0;
-  var z = elem.data('z') || 0;
-
-  if (transform) {
-    if (has3d) {
-      var props = [];
-
-      if(rotation!=0){
-        props.push('rotateY(' + rotation + 'deg)');
-      }
-
-      if(z!=0){
-        props.push('translateZ(' + z + 'px)');
-      }
-
-      var propsst = props.join(' ');
-
-      el.style[transform] = propsst;
-    } else {
-      //el.style[transform] = 'translate(' + x + 'px,' + y + 'px)';
-    }
-  } else {
-    //el.style.left = x;
-    //el.style.top = y;
-  }
-}
-
-function setZ(elem, amount){
-  elem.data('z', amount);
-  setLeafTransform(elem);
-}
-
-function setRotation(elem, amount){
-  elem.data('rot', amount);
-  setLeafTransform(elem);
-}
-
-function setAnimationTime(elem, ms){
-  ['', '-webkit-', '-moz-', '-ms-', '-o-'].forEach(function(prefix){
-    elem.css(prefix + 'transition', 'all ' + ms + 'ms');
-  })
+var options_defaults = {
+  masksize:1,
+  animtime:1500
 }
 
 function PageTurner(options){
   options = this.options = options || {};
 
+  for(var prop in options_defaults){
+    if(options[prop]===null || options[prop]===undefined){
+      options[prop] = options_defaults[prop];
+    }
+  }
+
   if (!(this instanceof PageTurner)) return new PageTurner(options);
 
   var self = this;
+
   Emitter.call(this);
+
+  this.options = options;
 
   this.page_html = [];
   this.currentpage = 0;
@@ -131,6 +96,7 @@ PageTurner.prototype.resize = function(){
 PageTurner.prototype.load_page = function(index){
   var self = this;
   
+  self.emit('load', index);
   this.currentpage = index;
 
   this.baseleft = this.create_leaf('left', this.page_html[index-1]);
@@ -152,7 +118,14 @@ PageTurner.prototype.load_page = function(index){
 
   setRotation(this.leafright, 180);
 
-  this.book.find('.leaf').each(function(){
+  self.processmask(this.baseleft, 1);
+  self.processmask(this.baseright, 1);
+
+  this.leafleft.find('.leaf').each(function(){
+    self.processmask($(this));
+  })
+
+  this.leafright.find('.leaf').each(function(){
     self.processmask($(this));
   })
 
@@ -167,7 +140,11 @@ PageTurner.prototype.load_page = function(index){
     self.baseleft.show();
     self.leafright.show();
     self.leafleft.show();
-    self.active = true;
+
+    setTimeout(function(){
+      self.active = true;
+      self.emit('loaded', index);
+    }, 500)
   }, 500);
 }
 
@@ -177,8 +154,8 @@ PageTurner.prototype.processmask = function(leaf, val){
   var usemask = arguments.length==2 ? val : 0;
 
   var rect = leaf.data('side') == 'left' ? 
-    'rect(0px, ' + ((size.width/2) + usemask) + 'px, ' + (size.height) + 'px, -20px)' :
-    'rect(0px, ' + (size.width+20) + 'px, ' + (size.height) + 'px, ' + ((size.width/2)) + 'px)'
+    'rect(0px, ' + ((size.width/2)+usemask) + 'px, ' + (size.height) + 'px, 0px)' :
+    'rect(0px, ' + (size.width) + 'px, ' + (size.height) + 'px, ' + ((size.width/2)-usemask) + 'px)'
 
   leaf.css({
     'clip':rect
@@ -192,8 +169,8 @@ PageTurner.prototype.processmask = function(leaf, val){
 */
 PageTurner.prototype.create_leaf = function(side, html, domask){
   var leaf = $('<div class="leaf nobackside"><div class="content nobackside">' + html + '</div></div>');
-  if(this.options.pageclass){
-    leaf.find('.content').addClass(this.options.pageclass);
+  if(this.options.apply_pageclass){
+    leaf.find('.content').addClass(this.options.apply_pageclass);
   }
   leaf.data('side', side);
   leaf.width(this.size.width).height(this.size.height);
@@ -260,15 +237,37 @@ PageTurner.prototype.animate_direction = function(direction){
   var otherside = (side=='left' ? 'right' : 'left');
   var leaf = this['leaf' + side];
   var otherleaf = this['leaf' + otherside];
+  var base = this['base' + side];
+  var otherbase = this['base' + otherside];
 
+  if(leaf.index()==0){
+    otherleaf.insertBefore(leaf);
+  }
 
-
-  
   leaf.find('.leaf').each(function(){
-    self.processmask($(this), masksize);
+    self.processmask($(this), self.options.masksize);  
   })
   
+
+//  leaf.data('side', side);
+
+  //self.processmask(leaf, self.options.masksize);
+
+/*
+  if(base.index()==0){
+    otherbase.insertBefore(base);
+  }
+
+  self.processmask(base, self.options.masksize);
+*/
+/*
+  leaf.find('.leaf').each(function(){
+    self.processmask($(this), self.options.masksize);
+  })
+
+
   if(side=='left'){
+
     otherleaf.css({
       'z-index':0
     })
@@ -278,19 +277,22 @@ PageTurner.prototype.animate_direction = function(direction){
     setZ(leaf, -1);
     setZ(otherleaf, 1);
 
-    self.processmask(this['baseleft'], masksize);
+    self.processmask(self['baseleft'], self.options.masksize);
   }
   else{
-    self.processmask(this['baseright'], masksize);
+    self.processmask(self['baseright'], self.options.masksize);
   }
-  
+  */
 
-  setAnimationTime(leaf, animtime);
+  setAnimationTime(leaf, self.options.animtime);
   setRotation(leaf, side=='left' ? 180 : 0);
+
+  self.emit('animate', side);
   
   setTimeout(function(){
+    self.emit('animated', side);
     self.load_page(nextpage);
-  }, animtime + 100)
+  }, self.options.animtime + 100)
 }
 
 /*
@@ -300,4 +302,52 @@ PageTurner.prototype.animate_direction = function(direction){
 */
 PageTurner.prototype.animate_index = function(index){
 
+}
+
+
+
+function setLeafTransform(elem){
+  var el = elem.get(0);
+
+  var rotation = elem.data('rot') || 0;
+  var z = elem.data('z') || 0;
+
+  if (transform) {
+    if (has3d) {
+      var props = [];
+
+      if(rotation!=0){
+        props.push('rotateY(' + rotation + 'deg)');
+      }
+
+      if(z!=0){
+        props.push('translateZ(' + z + 'px)');
+      }
+
+      var propsst = props.join(' ');
+
+      el.style[transform] = propsst;
+    } else {
+      //el.style[transform] = 'translate(' + x + 'px,' + y + 'px)';
+    }
+  } else {
+    //el.style.left = x;
+    //el.style.top = y;
+  }
+}
+
+function setZ(elem, amount){
+  elem.data('z', amount);
+  setLeafTransform(elem);
+}
+
+function setRotation(elem, amount){
+  elem.data('rot', amount);
+  setLeafTransform(elem);
+}
+
+function setAnimationTime(elem, ms){
+  ['', '-webkit-', '-moz-', '-ms-', '-o-'].forEach(function(prefix){
+    elem.css(prefix + 'transition', 'all ' + ms + 'ms');
+  })
 }
