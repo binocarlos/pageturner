@@ -16,7 +16,7 @@
   left:-5px;
 }
 
-.pageturner-book #leaves{  
+.pageturner-book #leaves{
   position:absolute;
   -webkit-perspective: 800px;
   -moz-perspective: 800px;

@@ -15,7 +15,8 @@ module.exports = PageTurner;
 
 var options_defaults = {
   masksize:1,
-  animtime:1500
+  animtime:1500,
+  perspective:800
 }
 
 function PageTurner(options){
@@ -68,6 +69,8 @@ PageTurner.prototype.render = function(){
   this.base = this.book.find('#base');
   this.leaves = this.book.find('#leaves');
 
+  setPerspective(this.leaves, this.options.perspective);
+
   this.book.bind('resize', function(){
     self.resize();
   });
@@ -75,6 +78,17 @@ PageTurner.prototype.render = function(){
   this.resize();
   this.load_page(this.options.startpage || 0);
 
+  var resizingID = null;
+
+  $(window).resize(function(){
+    if(resizingID){
+      clearTimeout(resizingID);
+    }
+    resizingID = setTimeout(function(){
+      self.resize();
+    }, 10)
+    
+  })
 }
 
 PageTurner.prototype.resize = function(){
@@ -243,6 +257,7 @@ PageTurner.prototype.animate_direction = function(direction){
 
   if(leaf.index()==0){
     otherleaf.insertBefore(leaf);
+    otherbase.insertBefore(base);
   }
 
 /*
@@ -316,5 +331,11 @@ function setRotation(elem, amount){
 function setAnimationTime(elem, ms){
   ['', '-webkit-', '-moz-', '-ms-', '-o-'].forEach(function(prefix){
     elem.css(prefix + 'transition', 'all ' + ms + 'ms');
+  })
+}
+
+function setPerspective(elem, amount){
+  ['', '-webkit-', '-moz-', '-ms-', '-o-'].forEach(function(prefix){
+    elem.css(prefix + 'perspective', amount + 'px');
   })
 }
