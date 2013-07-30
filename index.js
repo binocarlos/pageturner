@@ -130,22 +130,21 @@ PageTurner.prototype.load_page = function(index){
   })
 
   setTimeout(function(){
-    existingbase.fadeOut(500, function(){
+    existingbase.fadeOut(200, function(){
       existingbase.remove();
     });
-    existingleaves.fadeOut(500, function(){
+    existingleaves.fadeOut(200, function(){
       existingleaves.remove();
     });
-    self.baseright.show();
-    self.baseleft.show();
+    
     self.leafright.show();
     self.leafleft.show();
 
     setTimeout(function(){
       self.active = true;
       self.emit('loaded', index);
-    }, 500)
-  }, 500);
+    }, 200)
+  }, 200);
 }
 
 PageTurner.prototype.processmask = function(leaf, val){
@@ -240,49 +239,17 @@ PageTurner.prototype.animate_direction = function(direction){
   var base = this['base' + side];
   var otherbase = this['base' + otherside];
 
+  base.show();
+
   if(leaf.index()==0){
     otherleaf.insertBefore(leaf);
   }
 
+/*
   leaf.find('.leaf').each(function(){
     self.processmask($(this), self.options.masksize);  
   })
-  
-
-//  leaf.data('side', side);
-
-  //self.processmask(leaf, self.options.masksize);
-
-/*
-  if(base.index()==0){
-    otherbase.insertBefore(base);
-  }
-
-  self.processmask(base, self.options.masksize);
 */
-/*
-  leaf.find('.leaf').each(function(){
-    self.processmask($(this), self.options.masksize);
-  })
-
-
-  if(side=='left'){
-
-    otherleaf.css({
-      'z-index':0
-    })
-    leaf.css({
-      'z-index':1
-    })
-    setZ(leaf, -1);
-    setZ(otherleaf, 1);
-
-    self.processmask(self['baseleft'], self.options.masksize);
-  }
-  else{
-    self.processmask(self['baseright'], self.options.masksize);
-  }
-  */
 
   setAnimationTime(leaf, self.options.animtime);
   setRotation(leaf, side=='left' ? 180 : 0);

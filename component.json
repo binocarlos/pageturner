@@ -2,7 +2,7 @@
   "name": "pageturner",
   "repo": "binocarlos/pageturner",
   "description": "A jQuery widget that turns HTML into a CSS 3d book",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "keywords": [],
   "dependencies": {
     "component/emitter": "*",
