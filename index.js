@@ -86,7 +86,7 @@ PageTurner.prototype.render = function(){
     }
     resizingID = setTimeout(function(){
       self.resize();
-    }, 10)
+    }, 100)
     
   })
 }
