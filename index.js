@@ -15,7 +15,7 @@ module.exports = PageTurner;
 
 var options_defaults = {
   masksize:1,
-  animtime:1500,
+  animtime:1200,
   perspective:800
 }
 
@@ -100,6 +100,8 @@ PageTurner.prototype.resize = function(){
   this.base.width(this.size.width).height(this.size.height);
   this.leaves.width(this.size.width).height(this.size.height);
   this.book.find('.leaf, .leafholder').width(this.size.width).height(this.size.height);
+
+  this.emit('resize', this.size);
 }
 
 /*
@@ -200,6 +202,8 @@ PageTurner.prototype.create_double_leaf = function(beforehtml, afterhtml){
   double_leaf.width(this.size.width).height(this.size.height);
   double_leaf.append(afterleaf).append(beforeleaf);
   double_leaf.append(edge);
+  double_leaf.before = beforeleaf;
+  double_leaf.after = afterleaf;
   setRotation(beforeleaf, 180);
   setRotation(edge, -90);
   return double_leaf;
@@ -270,11 +274,12 @@ PageTurner.prototype.animate_direction = function(direction){
   setRotation(leaf, side=='left' ? 180 : 0);
 
   self.emit('animate', side);
-  
+
   setTimeout(function(){
     self.emit('animated', side);
     self.load_page(nextpage);
-  }, self.options.animtime + 100)
+  }, self.options.animtime + 10)
+
 }
 
 /*
