@@ -37,11 +37,6 @@ function PageTurner(options){
   this.options = options;
   this.is3d = options.has3d;
 
-  console.log('-------------------------------------------');
-  console.log('-------------------------------------------');
-  console.log('3d');
-  console.dir(this.is3d);
-
   this.page_html = [];
   this.currentpage = 0;
 
@@ -130,7 +125,7 @@ PageTurner.prototype.load_page = function(index){
 
   if(this.is3d){
     this.leafleft = this.create_double_leaf(this.page_html[index-1], this.page_html[index]);
-    this.leafright = this.create_double_leaf(this.page_html[index], this.page_html[index+1]);  
+    this.leafright = this.create_double_leaf(this.page_html[index], this.page_html[index+1]);
   }
   
   var existingbase = this.base.find('.leaf');
@@ -160,7 +155,7 @@ PageTurner.prototype.load_page = function(index){
     setRotation(this.leafright, 180);
 
     this.leafleft.find('.leaf').each(function(i){
-      self.processmask($(this));
+      self.processmask($(this), 1);
     })
 
     this.leafright.find('.leaf').each(function(i){
@@ -201,9 +196,10 @@ PageTurner.prototype.processmask = function(leaf, val){
 
   var usemask = arguments.length==2 ? val : 0;
 
+  // clip: rect(<top>, <right>, <bottom>, <left>);
   var rect = leaf.attr('data-side') == 'left' ? 
-    'rect(0px, ' + ((size.width/2)+usemask) + 'px, ' + (size.height) + 'px, 0px)' :
-    'rect(0px, ' + (size.width) + 'px, ' + (size.height) + 'px, ' + ((size.width/2)-usemask) + 'px)'
+    'rect(0px, ' + (Math.ceil(size.width/2)+usemask) + 'px, ' + (size.height) + 'px, 0px)' :
+    'rect(0px, ' + (size.width) + 'px, ' + (size.height) + 'px, ' + (Math.floor(size.width/2)-usemask) + 'px)'
 
   leaf.css({
     'clip':rect
@@ -216,7 +212,7 @@ PageTurner.prototype.processmask = function(leaf, val){
   
 */
 PageTurner.prototype.create_leaf = function(side, html, domask){
-  var leaf = $('<div class="leaf nobackside"><div class="content nobackside">' + html + '</div></div>');
+  var leaf = $('<div class="leaf nobackside"><div class="content">' + html + '</div></div>');
   if(this.options.apply_pageclass){
     leaf.find('.content').addClass(this.options.apply_pageclass);
   }
@@ -338,7 +334,7 @@ PageTurner.prototype.animate_direction = function(direction, nextpage){
   otherleaf.insertBefore(leaf);
 
   leaf.find('.leaf').each(function(i){
-    self.processmask($(this), self.options.masksize);  
+    self.processmask($(this), self.options.masksize);
   })
 
 

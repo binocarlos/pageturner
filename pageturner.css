@@ -26,6 +26,7 @@
 }
 
 .nobackside{
+  
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   -ms-backface-visibility: hidden;
@@ -36,6 +37,7 @@
   -ms-transform: translate3d(0,0,0);
   -o-transform: translate3d(0,0,0);
   transform: translate3d(0,0,0);
+  
 }
 
 .maintain3d{

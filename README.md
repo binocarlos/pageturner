@@ -7,7 +7,7 @@
 
   Install with [component(1)](http://component.io):
 
-    $ component install binocarlos/storytimepage
+    $ component install binocarlos/pageturner
 
 ## example
 
