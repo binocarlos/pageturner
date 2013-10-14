@@ -8,7 +8,9 @@
     "component/emitter": "*",
     "component/has-translate3d": "*",
     "component/transform-property": "*",
-    "component/jquery": "*"
+    "component/jquery": "*",
+    "pgherveou/transitionend": "*",
+    "anthonyshort/after-transition": "*"
   },
   "development": {},
   "license": "MIT",
@@ -19,5 +21,6 @@
   "scripts": [
     "index.js",
     "templates/booktemplate.js"
-  ]
+  ],
+  "remotes": []
 }
