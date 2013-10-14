@@ -169,17 +169,17 @@ PageTurner.prototype.render = function(){
   */
   this.leaves = this.book.find('#leaves');
 
+  this.leafelems = $('<div class="leafholder maintain3d"></div>');
+
   var edgeelem = $('<div class="leafholder maintain3d"><div class="leafedge"></div></div>');
   this.edge = edgeelem;
-  
+
   setRotation(this.edge.find('.leafedge'), 90);
-
-  
-
   setPerspective(this.leaves, this.options.perspective);
-  
-  
 
+  this.leaves.append(this.leafelems);
+  this.leaves.append(this.edge);
+  
   this.resize();
   this.load_page(this.options.startpage || 0);
 
@@ -265,30 +265,28 @@ PageTurner.prototype.load_page = function(index){
   }
   
   var existingbase = this.base.find('.leaf');
-  var existingleaves = this.leaves.find('.leaf');
+  var existingleaves = this.leafelems.find('.leaf');
 
   this.base.prepend(this.baseright).prepend(this.baseleft);
 
-  self.processmask(this.baseleft, 1);
-  self.processmask(this.baseright, 1);
+  self.processmask(this.baseleft, 0);
+  self.processmask(this.baseright, 0);
 
   if(this.is3d){
 
-    self.processmask(this.leftfront);
-    self.processmask(this.rightfront);
-    self.processmask(this.leftback);
-    self.processmask(this.rightback);
+    self.processmask(this.leftfront, 0);
+    self.processmask(this.rightfront, 0);
+    self.processmask(this.leftback, 0);
+    self.processmask(this.rightback, 0);
 
-    setRotation(this.leftback, 90);
+    setRotation(this.leftback, -90);
     setRotation(this.rightback, 90);
     
-    this.leaves.append(this.leftfront)
-    this.leaves.append(this.rightfront);
-    this.leaves.append(this.leftback)
-    this.leaves.append(this.rightback);
+    this.leafelems.append(this.leftfront)
+    this.leafelems.append(this.rightfront);
+    this.leafelems.append(this.leftback)
+    this.leafelems.append(this.rightback);
   }
-
-  this.leaves.append(this.edge);
 
   setTimeout(function(){
 
@@ -392,13 +390,36 @@ PageTurner.prototype.animate_direction = function(direction, nextpage){
     return;
   }
 
-  console.log('-------------------------------------------');
-  console.log('here');
-  console.log(side);
-
   var direction = side=='left' ? 1 : -1;
 
-  setRotation(this[side + 'front'], direction * 75);
+  var frontleaf = this[side + 'front'];
+  var backleaf = this[side + 'back'];
+
+  self.processmask(frontleaf, 5);
+  self.processmask(backleaf, 5);
+
+  //this.leafelems.append(frontleaf);
+  //this.leafelems.append(backleaf);
+
+  // initial setup
+  //setRotation(this.leftback, -90);
+  //setRotation(this.rightback, 90);
+
+
+  setupAnimator(frontleaf, 'after', self.options.animtime/2, function(){
+    
+    console.log('-------------------------------------------');
+    console.log('half!');
+    // the first half has finished
+    setRotation(backleaf, 0);
+  });
+
+  setupAnimator(backleaf, 'before', self.options.animtime/2, function(){
+    console.log('-------------------------------------------');
+    console.log('finished!');
+  })
+
+  setRotation(frontleaf, direction * 90);
 
 /*
   var frontleaf = this[side + 'front'];
@@ -507,15 +528,23 @@ function setRotation(elem, amount){
   setLeafTransform(elem);
 }
 
-function setupAnimator(elem, ms, fn){
+var easings = {
+  'linear':'cubic-bezier(0.250, 0.250, 0.750, 0.750)',
+  'easein':'cubic-bezier(0.420, 0.000, 1.000, 1.000)',
+  'easeout':'cubic-bezier(0.000, 0.000, 0.580, 1.000)'
+}
+
+function setupAnimator(elem, sequence, ms, fn){
+  var easingname = sequence=='before' ? 'easeout' : 'easein';
+  var easing = easings[easingname];
+
   ['', '-webkit-', '-moz-', '-ms-', '-o-'].forEach(function(prefix){
-    elem.css(prefix + 'transition', 'all ' + ms + 'ms');
+    elem.css(prefix + 'transition-timing-function', easing);
+    elem.css(prefix + 'transition', 'all ' + ms + 'ms ' + easing);
   })
 
   afterTransition.once(elem.get(0), function(){
-    console.log('-------------------------------------------');
-    console.log('-------------------------------------------');
-    console.log('done it!');
+    fn && fn();
   });
 }
 
