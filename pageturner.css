@@ -10,19 +10,21 @@
 }
 
 .pageturner-book .leafedge{
-  background-color: #f00 !important;
-  width:100px;
+  background-color: #fff !important;
   height:100%;
   position: absolute;
 }
 
-.pageturner-book #leaves{
+.pageturner-book #fronts{
   position:absolute;
-  -webkit-perspective: 800px;
-  -moz-perspective: 800px;
-  -ms-perspective: 800px;
-  -0-perspective: 800px;
-  perspective: 800px;
+}
+
+.pageturner-book #backs{
+  position:absolute;
+}
+
+.pageturner-book #edges{
+  position:absolute;
 }
 
 .nobackside{
