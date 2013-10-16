@@ -555,7 +555,7 @@ PageTurner.prototype.animate_direction = function(direction, nextpage){
       edge.css({
         opacity:0
       })
-    }, self.options.animtime/4);
+    }, (3*self.options.animtime)/8);
 
     setRotation(edge, edge_target_rotation);  
     
@@ -586,7 +586,7 @@ PageTurner.prototype.animate_direction = function(direction, nextpage){
     edge.css({
       opacity:1
     })
-  }, self.options.animtime/4);
+  }, self.options.animtime/8);
 
   self.emit('animate', side, nextpage);
 
@@ -717,7 +717,7 @@ var easings = {
 
 function setupAnimator(elem, sequence, ms, fn){
   //var easingname = sequence=='before' ? 'easeout' : 'easein';
-  var easingname = sequence=='before' ? 'easeout' : 'easein';
+  var easingname = sequence=='before' ? 'easein' : 'easeout';
   var easing = easings[easingname];
 
   ['', '-webkit-', '-moz-', '-ms-', '-o-'].forEach(function(prefix){
