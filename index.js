@@ -494,9 +494,12 @@ PageTurner.prototype.set_leaf_rotation = function(side, percent){
 */
 PageTurner.prototype.animate_direction = function(direction, nextpage){
   var self = this;
+
   if(!self.active){
     return;
   }
+
+  self.active = false;
 
   if(arguments.length<=1){
     nextpage = this.currentpage + direction;  
@@ -636,6 +639,11 @@ PageTurner.prototype.animate_direction = function(direction, nextpage){
 PageTurner.prototype.animate_index = function(index){
   var self = this;
 
+  if(!self.active){
+    return;
+  }
+
+  self.active = false;
   var side = index>this.currentpage ? 'right' : 'left';
   var direction = index>this.currentpage ? 1 : -1;
   var leafname = index>this.currentpage ? 'afterleaf' : 'beforeleaf';
