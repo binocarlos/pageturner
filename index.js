@@ -505,6 +505,7 @@ PageTurner.prototype.animate_direction = function(direction, nextpage){
     nextpage = this.currentpage + direction;  
 
     if(nextpage<0 || nextpage>=this.page_html.length){
+      self.emit('canceldrag');
       return;
     }
   }
@@ -520,7 +521,6 @@ PageTurner.prototype.animate_direction = function(direction, nextpage){
   }
 
   var direction = side=='left' ? 1 : -1;
-
 
   var edge_target_rotation = side=='left' ? 180 : -180;
   var edge_middle_rotation = side=='left' ? 90 : -90;
