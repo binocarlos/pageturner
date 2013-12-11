@@ -594,6 +594,7 @@ PageTurner.prototype.animate_direction = function(direction, nextpage){
   self.emit('animate', side, nextpage);
 
   removeAnimator(backleaf);
+
   setRotation(frontleaf, direction * 90);
   setRotation(edge, edge_middle_rotation);
   
@@ -659,17 +660,18 @@ PageTurner.prototype.animate_index = function(index){
   var base = this['base' + side];
 
   if(base){
-    base.find('.content').html(basehtml);  
+    base.find('.content').html(basehtml);
   }
   
 
   var leaf = this[side + 'back'];
 
   if(leaf){
-    leaf.find(' .content').html(basehtml);  
+    leaf.find(' .content').html(basehtml);
   }
   
   setTimeout(function(){
+    self.active = true;
     self.animate_direction(direction, index);
   }, 500)
 }
