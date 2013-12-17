@@ -406,6 +406,8 @@ PageTurner.prototype.load_page = function(index){
     
     this.backs.append(this.rightback);
     this.backs.append(this.leftback)
+
+    this.emit('pagebuilt');
   }
 
 
