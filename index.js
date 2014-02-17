@@ -512,6 +512,8 @@ PageTurner.prototype.animate_direction = function(direction, nextpage){
     }
   }
 
+  this.emit('load', nextpage);
+
   var side = direction<0 ? 'left' : 'right';
   var otherside = (side=='left' ? 'right' : 'left');
 
