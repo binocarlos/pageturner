@@ -19,8 +19,7 @@
     "pageturner.css"
   ],
   "scripts": [
-    "index.js",
-    "templates/booktemplate.js"
+    "index.js"
   ],
   "remotes": []
 }

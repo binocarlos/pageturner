@@ -58,7 +58,22 @@ var has3d = require('has-translate3d');
 var transEndEventName = require("transitionend");
 var afterTransition = require('after-transition');
 
-var template = require('./templates/booktemplate.js');
+var template = [
+  '<div class="pageturner-book">',
+  '  <div id="base">',
+
+  '  </div>',
+  '  <div id="fronts">',
+
+  '  </div>',
+  '  <div id="backs">',
+
+  '  </div>',
+  '  <div id="edges">',
+
+  '  </div>',
+  '</div>'
+].join("\n");
 
 module.exports = PageTurner;
 
@@ -225,25 +240,13 @@ PageTurner.prototype.render = function(){
   */
   this.edges = this.book.find('#edges');
 
-/*
-  this.frontleafelems = $('<div class="leafholder maintain3d"></div>');
-  this.backleafelems = $('<div class="leafholder maintain3d"></div>');
-*/
-
   setPerspective(this.fronts, this.options.perspective);
   setPerspective(this.backs, this.options.perspective);
-  //setPerspective(this.edges, this.options.perspective);
-
-/*  
-  this.leaves.append(this.frontleafelems);
-  this.leaves.append(this.backleafelems);
-*/
 
   this.resize();
   this.load_page(this.options.startpage || 0);
 
   var resizingID = null;
-
   $(window).resize(function(){
     if(resizingID){
       clearTimeout(resizingID);
@@ -251,7 +254,6 @@ PageTurner.prototype.render = function(){
     resizingID = setTimeout(function(){
       self.resize();
     }, 100)
-    
   })
 }
 
@@ -407,7 +409,7 @@ PageTurner.prototype.load_page = function(index){
     this.backs.append(this.rightback);
     this.backs.append(this.leftback)
 
-    this.emit('pagebuilt');
+    this.emit('pagebuilt', index);
   }
 
 
