@@ -597,12 +597,16 @@ PageTurner.prototype.animate_direction = function(direction, nextpage){
     })
   }, self.options.animtime/8);
 
+  edge.css({
+    opacity:1
+  })
+
   self.emit('animate', side, nextpage);
 
   removeAnimator(backleaf);
 
-  setRotation(frontleaf, direction * 90);
-  setRotation(edge, edge_middle_rotation);
+  setRotation(frontleaf, direction * 45);
+  setRotation(edge, 45);//edge_middle_rotation);
   
 /*
   var frontleaf = this[side + 'front'];
