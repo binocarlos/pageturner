@@ -15,34 +15,18 @@
   position: absolute;
 }
 
-.pageturner-book #fronts{
-  position:absolute;
-}
-
-.pageturner-book #backs{
-  position:absolute;
-}
-
-.pageturner-book #edges{
+.pageturner-book #leaves{
   position:absolute;
 }
 
 .nobackside{
-  
-  /*
-  -webkit-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  -ms-backface-visibility: hidden;
-  -o-backface-visibility: hidden;
-  backface-visibility: hidden;
-  */
   -webkit-transform: translate3d(0,0,0);
   -moz-transform: translate3d(0,0,0);
   -ms-transform: translate3d(0,0,0);
   -o-transform: translate3d(0,0,0);
   transform: translate3d(0,0,0);
-  
-  
+  -webkit-backface-visibility:hidden; /* Chrome, Safari, Opera */
+  backface-visibility:hidden;
 }
 
 .maintain3d{
@@ -65,15 +49,7 @@
   display: block;
   position: absolute;
   width:100%;
-  height:100%;
-  /*
-  -webkit-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  -ms-backface-visibility: hidden;
-  -o-backface-visibility: hidden;
-  backface-visibility: hidden; 
-  */ 
-  
+  height:100%;  
 }
 
 .pageturner-book .content{

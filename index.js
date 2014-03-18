@@ -60,16 +60,7 @@ var afterTransition = require('after-transition');
 
 var template = [
   '<div class="pageturner-book">',
-  '  <div id="base">',
-
-  '  </div>',
-  '  <div id="fronts">',
-
-  '  </div>',
-  '  <div id="backs">',
-
-  '  </div>',
-  '  <div id="edges">',
+  '  <div id="leaves">',
 
   '  </div>',
   '</div>'
@@ -102,6 +93,7 @@ function PageTurner(options){
   this.is3d = has3d && options.has3d;
 
   this.page_html = [];
+  this.pages = [];
   this.currentpage = 0;
 
   this.book = $(this.options.bookselector);
@@ -131,119 +123,12 @@ PageTurner.prototype.render = function(){
 
   this.book.html(template);
 
-  /*
-  
-    #base
+  this.leaves = this.book.find('#leaves');
 
-    the left and right pages for the prev and next pages
-
-    -------------------------------------------------
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |       prev left       |       next right      |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    -------------------------------------------------
-    
-    
-  */
-  this.base = this.book.find('#base');
-
-  /*
-  
-    #current
-
-    the leaves that we see as the book
-
-    -------------------------------------------------
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |      front left       |     front right       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    -------------------------------------------------
-    
-    
-  */
-  this.fronts = this.book.find('#fronts');  
-
-  /*
-  
-    #leaves
-
-    the DOM element that holds our page turning leaves
-
-    we have 2 leaves '#back' and '#forward' - each meaning a direction the book is turning
-
-    -------------------------------------------------
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |      back left        |      back right       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    -------------------------------------------------
-    
-    
-  */
-  this.backs = this.book.find('#backs');
-
-  /*
-
-
-                                 the edge is 90 degrees so it shows when the page is flat
-                                  |       
-                        -        _
-                        -\      /_ 
-                        - \    / _  
-                        -  \  /  _
-    -----------------------------_-------------------
-    |                   -   |    _                  |
-    |                   -   |    _                  | 
-    |                   -   |    _                  |
-    |                   -   |    _                  |
-    |                   -   |    _                  |
-    |                   -   |    _                  |
-    |                   -   |    _                  |
-    |                   -   |    _                  |
-    |                   -   |    _                  |
-    |                   -   |    _                  |
-    |                    \  |  /                    |
-    |                     \ | /                     |
-    |                      \|/                      |
-    -------------------------------------------------
-    
-    
-  */
-  this.edges = this.book.find('#edges');
-
-  setPerspective(this.fronts, this.options.perspective);
-  setPerspective(this.backs, this.options.perspective);
+  setPerspective(this.leaves, this.options.perspective);
 
   this.resize();
+
   this.load_page(this.options.startpage || 0);
 
   var resizingID = null;
@@ -257,74 +142,6 @@ PageTurner.prototype.render = function(){
   })
 }
 
-PageTurner.prototype.build_edges = function(){
-
-  var self = this;
-  if(this.leftedge){
-    this.leftedge.remove();
-  }
-
-  if(this.rightedge){
-    this.rightedge.remove();
-  }
-
-  var leftedgeelem = $('<div class="leftedge leafholder maintain3d"><div class="leafedge"></div></div>').css({
-    'z-index':1000
-  })
-  var rightedgeelem = $('<div class="rightedge leafholder maintain3d"><div class="leafedge"></div></div>').css({
-    'z-index':1001
-  })
-
-  this.leftedge = leftedgeelem;
-  this.rightedge = rightedgeelem;
-
-  self.leftedge.css({
-    opacity:0
-  })
-
-  self.rightedge.css({
-    opacity:0
-  })
-
-  var edgewidth = this.options.edgewidth || 10;
-  var leftrotatededge = this.leftedge.find('.leafedge').css({
-    width:edgewidth + 'px',
-    left:-(edgewidth/2) + 'px'
-  })
-
-  var rightrotatededge = this.rightedge.find('.leafedge').css({
-    width:edgewidth + 'px',
-    right:-(edgewidth/2) + 'px'
-  })
-
-  setRotation(leftrotatededge, 90);
-  setRotation(rightrotatededge, 90);
-
-  this.backs.append(this.rightedge);
-  this.backs.append(this.leftedge);
-}
-
-PageTurner.prototype.resize = function(){
-  this.size = {
-    width:this.book.width(),
-    height:this.book.height()
-  }
-
-  this.base.width(this.size.width).height(this.size.height);
-
-  if(this.is3d){
-    this.fronts.width(this.size.width).height(this.size.height);
-    this.backs.width(this.size.width).height(this.size.height);
-    this.book.find('.leaf, .leafholder').width(this.size.width).height(this.size.height);  
-  }
-  
-
-  this.emit('resize', this.size);
-}
-
-PageTurner.prototype.get_page_html = function(index){
-  return (this.page_html[index] || '').replace(/>undefined</g, '><');
-}
 
 /*
 
@@ -336,8 +153,220 @@ PageTurner.prototype.get_page_html = function(index){
 PageTurner.prototype.load_page = function(index){
   var self = this;
   
-  self.emit('load', index);
   this.currentpage = index;
+
+  var render_gap = this.options.render_gap || 3;
+  var min = index - render_gap;
+  var max = index + render_gap;
+  if(min<0){
+    min = 0;
+  }
+  if(max>this.page_html.length-1){
+    max = this.page_html.length-1;
+  }
+  
+  for(var i=0; i<this.page_html.length; i++){
+    if(i>=min && i<=max){
+      var page = this.create_page(i);
+      var o = i==index ? 1 : 0;
+      page.left.css({
+        opacity:o
+      })
+      page.right.css({
+        opacity:o
+      })
+
+      if(i==index){
+
+      }
+      else if(i>index){
+        setRotation(page.left, 180);
+      }
+      else if(i<index){
+        setRotation(page.right, -180);
+      }
+    }
+    else{
+      this.remove_page(i);
+    }
+  }
+
+  self.emit('load', index);
+  self.emit('loaded', index);
+  self.emit('view:page', index);
+}
+
+
+// create a pair of leaves and populate this.pages
+PageTurner.prototype.create_page = function(index){
+  var self = this;
+  if(this.pages[index]){
+    return this.pages[index];
+  }
+  var page = this.pages[index] = {
+    left:this.create_leaf('left', this.get_page_html(index)),
+    right:this.create_leaf('right', this.get_page_html(index))
+  }
+
+  this.leaves.append(this.pages[index].left);
+  this.leaves.append(this.pages[index].right);
+
+  if(this.is3d){
+
+    self.processmask(page.left, 0);
+    self.processmask(page.right, 0);
+
+  }
+
+  return this.pages[index];
+}
+
+// remove the DOM elements and edit this.pages
+PageTurner.prototype.remove_page = function(index){
+  if(!this.pages[index]){
+    return;
+  }
+
+  var page = this.pages[index];
+  page.left.remove();
+  page.right.remove();
+  delete(this.pages[index]);
+}
+
+PageTurner.prototype.animate_direction = function(direction, nextpage){
+  var self = this;
+
+  if(!self.active){
+    return;
+  }
+
+  self.active = false;
+
+  if(arguments.length<=1){
+    nextpage = this.currentpage + direction;  
+
+    if(nextpage<0 || nextpage>=this.page_html.length){
+      self.emit('canceldrag');
+      return;
+    }
+  }
+
+  //this.emit('load', nextpage);
+
+  var side = direction<0 ? 'left' : 'right';
+  var otherside = (side=='left' ? 'right' : 'left');
+
+  if(!this.is3d){
+    self.emit('animate', side, nextpage);
+    self.emit('animated', side, nextpage);
+    this.load_page(nextpage);
+    return;
+  }
+
+  var direction = side=='left' ? 1 : -1;
+
+  var frontleaf = this.pages[this.currentpage].right;
+  var backleaf = this.pages[this.currentpage + 1].left;
+
+  if(side=='left'){
+
+  }
+  else{
+
+    var frontleaf = this.pages[this.currentpage].right;
+    var backleaf = this.pages[this.currentpage + 1].left;
+    setupAnimator(frontleaf, 'before', self.options.animtime/2, function(){
+    
+    });
+
+    setupAnimator(backleaf, 'before', self.options.animtime/2, function(){
+      
+    });
+
+    backleaf.css({
+      opacity:1
+    })
+
+    setRotation(frontleaf, -180);
+    setRotation(backleaf, 0);  
+  }
+
+  
+/*
+  var frontleaf = this[side + 'front'];
+  var backleaf = this[side + 'back'];
+  var edge = this[side + 'edge'];
+
+  setRotation(frontleaf, direction * 45);
+  setRotation(edge, 45);//edge_middle_rotation);
+*/  
+
+  //self.processmask(frontleaf, 5);
+  //self.processmask(backleaf, 5);
+
+/*
+  edge.css({
+    opacity:0
+  })
+
+  setupAnimator(edge, 'after', self.options.animtime/2, function(){
+    
+    setupAnimator(edge, 'before', self.options.animtime/2, function(){
+      
+      
+
+    })
+
+    setTimeout(function(){
+      edge.css({
+        opacity:0
+      })
+    }, (3*self.options.animtime)/8);
+
+    setRotation(edge, edge_target_rotation);  
+    
+  });
+
+  setupAnimator(frontleaf, 'after', self.options.animtime/2, function(){
+
+    frontleaf.css({
+      opacity:0
+    })
+
+    backleaf.css({
+      opacity:1
+    })
+
+    setupAnimator(backleaf, 'before', self.options.animtime/2, function(){
+
+      self.emit('animated', side, nextpage);
+      self.load_page(nextpage);
+    })
+
+    setRotation(backleaf, 0);
+    
+    
+  });
+
+  setTimeout(function(){
+    edge.css({
+      opacity:1
+    })
+  }, self.options.animtime/8);
+
+  edge.css({
+    opacity:1
+  })
+
+  self.emit('animate', side, nextpage);
+
+  removeAnimator(backleaf);
+*/
+
+  
+
+}
+
 
   /*
   
@@ -345,7 +374,7 @@ PageTurner.prototype.load_page = function(index){
 
     if we are not 3d then these are the actual pages
     
-  */
+  
   this.baseleft = this.create_leaf('left', this.get_page_html(this.is3d ? index-1 : index)).css({
     display:'block'
   })
@@ -435,7 +464,8 @@ PageTurner.prototype.load_page = function(index){
   }, 500);
 
   this.build_edges();
-}
+  */
+
 
 PageTurner.prototype.processmask = function(leaf, val){
   var size = this.size;
@@ -457,7 +487,7 @@ PageTurner.prototype.processmask = function(leaf, val){
   create an element that is one page of content masked either left or right
   
 */
-PageTurner.prototype.create_leaf = function(side, html, withedge){
+PageTurner.prototype.create_leaf = function(side, html){
   var leaf = $('<div class="leaf nobackside"><div class="content">' + html + '</div></div>');
   if(this.options.apply_pageclass){
     leaf.find('.content').addClass(this.options.apply_pageclass);
@@ -491,12 +521,37 @@ PageTurner.prototype.set_leaf_rotation = function(side, percent){
 }
 
 
+PageTurner.prototype.get_page_html = function(index){
+  return (this.page_html[index] || '').replace(/>undefined</g, '><');
+}
+
+
+PageTurner.prototype.resize = function(){
+  this.size = {
+    width:this.book.width(),
+    height:this.book.height()
+  }
+
+  this.leaves.width(this.size.width).height(this.size.height);
+
+/*
+  if(this.is3d){
+    this.fronts.width(this.size.width).height(this.size.height);
+    this.backs.width(this.size.width).height(this.size.height);
+    this.book.find('.leaf, .leafholder').width(this.size.width).height(this.size.height);  
+  }
+*/
+  
+
+  this.emit('resize', this.size);
+}
+
 /*
 
   animate the book sequentially either left (-1) or right (1)
   
 */
-PageTurner.prototype.animate_direction = function(direction, nextpage){
+PageTurner.prototype.animate_direction2 = function(direction, nextpage){
   var self = this;
 
   if(!self.active){
@@ -538,15 +593,6 @@ PageTurner.prototype.animate_direction = function(direction, nextpage){
 
   self.processmask(frontleaf, 5);
   self.processmask(backleaf, 5);
-
-  //this.frontleafelems.append(frontleaf);
-  //this.leafelems.append(backleaf);
-
-  // initial setup
-  //setRotation(this.leftback, -90);
-  //setRotation(this.rightback, 90);
-
-  //setRotation(edge, side=='left' ? 0 : 180);
 
   edge.css({
     opacity:0
@@ -608,33 +654,6 @@ PageTurner.prototype.animate_direction = function(direction, nextpage){
   setRotation(frontleaf, direction * 45);
   setRotation(edge, 45);//edge_middle_rotation);
   
-/*
-  var frontleaf = this[side + 'front'];
-  var backleaf = this[side + 'back'];
-
-  self.active = false;  
-
-
-  leaf.find('.leaf').each(function(i){
-    self.processmask($(this), self.options.masksize);
-  })
-
-
-  setupAnimator(frontleaf, self.options.animtime, function(){
-    console.log('-------------------------------------------');
-    console.log('animate callback!');
-  });
-
-  setRotation(frontleaf, side=='left' ? 45 : 45);
-
-//  self.emit('animate', side, nextpage);
-
-  setTimeout(function(){
-    self.emit('animated', side, nextpage);
-    self.load_page(nextpage);
-  }, self.options.animtime + 10)
-*/
-
 }
 
 
@@ -685,6 +704,62 @@ PageTurner.prototype.animate_index = function(index){
     self.animate_direction(direction, index);
   }, 500)
 }
+
+
+
+
+
+
+
+
+PageTurner.prototype.build_edges = function(){
+
+  var self = this;
+  if(this.leftedge){
+    this.leftedge.remove();
+  }
+
+  if(this.rightedge){
+    this.rightedge.remove();
+  }
+
+  var leftedgeelem = $('<div class="leftedge leafholder maintain3d"><div class="leafedge"></div></div>').css({
+    'z-index':1000
+  })
+  var rightedgeelem = $('<div class="rightedge leafholder maintain3d"><div class="leafedge"></div></div>').css({
+    'z-index':1001
+  })
+
+  this.leftedge = leftedgeelem;
+  this.rightedge = rightedgeelem;
+
+  self.leftedge.css({
+    opacity:0
+  })
+
+  self.rightedge.css({
+    opacity:0
+  })
+
+  var edgewidth = this.options.edgewidth || 10;
+  var leftrotatededge = this.leftedge.find('.leafedge').css({
+    width:edgewidth + 'px',
+    left:-(edgewidth/2) + 'px'
+  })
+
+  var rightrotatededge = this.rightedge.find('.leafedge').css({
+    width:edgewidth + 'px',
+    right:-(edgewidth/2) + 'px'
+  })
+
+  setRotation(leftrotatededge, 90);
+  setRotation(rightrotatededge, 90);
+
+  this.backs.append(this.rightedge);
+  this.backs.append(this.leftedge);
+}
+
+
 
 
 
