@@ -314,83 +314,71 @@ PageTurner.prototype.run_animate = function(direction, done){
     return;
   }
 
+  var frontRotation = 0;
+  var pageDirection = 0;
+ 
+  var frontleaf, backleaf, nextleaf, hideleaf;
+
   if(side=='left'){
-
-    if(this.currentpage - 1<0){
-      return;
+    if(self.currentpage - 1<0){
+      return false;
     }
-    this.runningpage = this.currentpage-1;
-    var frontleaf = this.pages[this.currentpage].left;
-    var backleaf = this.pages[this.currentpage - 1].right;
-    var nextleaf = this.pages[this.currentpage - 1].left;
-
-    setupAnimator(frontleaf, 'before', self.options.animtime, function(){
     
-    });
+    pageDirection = -1;
+    frontRotation = 180;
 
-    setupAnimator(backleaf, 'before', self.options.animtime, function(){
-      self.runningpage = null;
-      self.load_page(self.currentpage - 1);
-      self.finish_animation(done);
-    });
-
-    backleaf.css({
-      opacity:1,
-      'z-index':1000
-    })
-
-    frontleaf.css({
-      opacity:1,
-      'z-index':1000
-    })
-
-    nextleaf.css({
-      opacity:1
-    })
-
-    setRotation(frontleaf, 180);
-    setRotation(backleaf, 0);
-
+    this.runningpage = this.currentpage-1;
+    hideleaf = this.pages[this.currentpage].right;
+    frontleaf = this.pages[this.currentpage].left;
+    backleaf = this.pages[this.currentpage - 1].right;
+    nextleaf = this.pages[this.currentpage - 1].left;
   }
   else{
-
-    if(this.currentpage + 1>this.page_html.length-1){
+    if(self.currentpage + 1>self.page_html.length-1){
       return;
     }
-    this.runningpage = this.currentpage+1;
-    var frontleaf = this.pages[this.currentpage].right;
-    var backleaf = this.pages[this.currentpage + 1].left;
-    var nextleaf = this.pages[this.currentpage + 1].right;
-
-    setupAnimator(frontleaf, 'before', self.options.animtime, function(){
     
-    });
+    pageDirection = 1;
+    frontRotation = -180;
 
-    setupAnimator(backleaf, 'before', self.options.animtime, function(){
-      self.runningpage = null;
-      self.load_page(self.currentpage + 1);
-      self.finish_animation(done);
-      
-    });
-
-    backleaf.css({
-      opacity:1,
-      'z-index':1000
-    })
-
-    frontleaf.css({
-      opacity:1,
-      'z-index':1000
-    })
-
-    nextleaf.css({
-      opacity:1
-    })
-
-    setRotation(frontleaf, -180);
-    setRotation(backleaf, 0);  
+    this.runningpage = this.currentpage+1;
+    hideleaf = this.pages[this.currentpage].left;
+    frontleaf = this.pages[this.currentpage].right;
+    backleaf = this.pages[this.currentpage + 1].left;
+    nextleaf = this.pages[this.currentpage + 1].right;
   }
 
+  setupAnimator(frontleaf, 'before', self.options.animtime, function(){
+  
+  });
+
+  setupAnimator(backleaf, 'before', self.options.animtime, function(){
+
+    self.runningpage = null;
+    setZ(hideleaf, 0);
+    self.load_page(self.currentpage + pageDirection);
+    self.finish_animation(done);
+    
+  });
+
+  setZ(hideleaf, -1);
+
+  backleaf.css({
+    opacity:1,
+    'z-index':1000
+  })
+
+  frontleaf.css({
+    opacity:1,
+    'z-index':1000
+  })
+
+  nextleaf.css({
+    opacity:1
+  })
+
+  setRotation(frontleaf, frontRotation);
+  setRotation(backleaf, 0);
 }
 
 
@@ -464,178 +452,6 @@ PageTurner.prototype.resize = function(){
 
   this.emit('resize', this.size);
 }
-
-/*
-
-  animate the book sequentially either left (-1) or right (1)
-  
-*/
-PageTurner.prototype.animate_direction2 = function(direction, nextpage){
-  var self = this;
-
-  if(!self.active){
-    return;
-  }
-
-  self.active = false;
-
-  if(arguments.length<=1){
-    nextpage = this.currentpage + direction;  
-
-    if(nextpage<0 || nextpage>=this.page_html.length){
-      self.emit('canceldrag');
-      return;
-    }
-  }
-
-  this.emit('load', nextpage);
-
-  var side = direction<0 ? 'left' : 'right';
-  var otherside = (side=='left' ? 'right' : 'left');
-
-  if(!this.is3d){
-    self.emit('animate', side, nextpage);
-    self.emit('animated', side, nextpage);
-    this.load_page(nextpage);
-    return;
-  }
-
-  var direction = side=='left' ? 1 : -1;
-
-  var edge_target_rotation = side=='left' ? 180 : -180;
-  var edge_middle_rotation = side=='left' ? 90 : -90;
-  var edge_reset_rotation = side=='left' ? -180 : 180;
-
-  var frontleaf = this[side + 'front'];
-  var backleaf = this[side + 'back'];
-  var edge = this[side + 'edge'];
-
-  self.processmask(frontleaf, 5);
-  self.processmask(backleaf, 5);
-
-  edge.css({
-    opacity:0
-  })
-
-  setupAnimator(edge, 'after', self.options.animtime, function(){
-    
-    setupAnimator(edge, 'before', self.options.animtime, function(){
-      
-      
-
-    })
-
-    setTimeout(function(){
-      edge.css({
-        opacity:0
-      })
-    }, (3*self.options.animtime)/8);
-
-    setRotation(edge, edge_target_rotation);  
-    
-  });
-
-  setupAnimator(frontleaf, 'after', self.options.animtime/2, function(){
-
-    frontleaf.css({
-      opacity:0
-    })
-
-    backleaf.css({
-      opacity:1
-    })
-
-    setupAnimator(backleaf, 'before', self.options.animtime/2, function(){
-
-      self.emit('animated', side, nextpage);
-      self.load_page(nextpage);
-    })
-
-    setRotation(backleaf, 0);
-    
-    
-  });
-
-  setTimeout(function(){
-    edge.css({
-      opacity:1
-    })
-  }, self.options.animtime/8);
-
-  edge.css({
-    opacity:1
-  })
-
-  self.emit('animate', side, nextpage);
-
-  removeAnimator(backleaf);
-
-  setRotation(frontleaf, direction * 45);
-  setRotation(edge, 45);//edge_middle_rotation);
-  
-}
-
-
-
-
-
-
-
-
-
-
-
-
-PageTurner.prototype.build_edges = function(){
-
-  var self = this;
-  if(this.leftedge){
-    this.leftedge.remove();
-  }
-
-  if(this.rightedge){
-    this.rightedge.remove();
-  }
-
-  var leftedgeelem = $('<div class="leftedge leafholder maintain3d"><div class="leafedge"></div></div>').css({
-    'z-index':1000
-  })
-  var rightedgeelem = $('<div class="rightedge leafholder maintain3d"><div class="leafedge"></div></div>').css({
-    'z-index':1001
-  })
-
-  this.leftedge = leftedgeelem;
-  this.rightedge = rightedgeelem;
-
-  self.leftedge.css({
-    opacity:0
-  })
-
-  self.rightedge.css({
-    opacity:0
-  })
-
-  var edgewidth = this.options.edgewidth || 10;
-  var leftrotatededge = this.leftedge.find('.leafedge').css({
-    width:edgewidth + 'px',
-    left:-(edgewidth/2) + 'px'
-  })
-
-  var rightrotatededge = this.rightedge.find('.leafedge').css({
-    width:edgewidth + 'px',
-    right:-(edgewidth/2) + 'px'
-  })
-
-  setRotation(leftrotatededge, 90);
-  setRotation(rightrotatededge, 90);
-
-  this.backs.append(this.rightedge);
-  this.backs.append(this.leftedge);
-}
-
-
-
-
 
 
 function setLeafTransform(elem){
