@@ -10,7 +10,8 @@
     "component/transform-property": "*",
     "component/jquery": "*",
     "pgherveou/transitionend": "*",
-    "anthonyshort/after-transition": "*"
+    "anthonyshort/after-transition": "*",
+    "slifszyc/user-agent": "*"
   },
   "development": {},
   "license": "MIT",

@@ -57,6 +57,9 @@ var transform = require('transform-property');
 var has3d = require('has-translate3d');
 var transEndEventName = require("transitionend");
 var afterTransition = require('after-transition');
+var ua = navigator.userAgent.toLowerCase();
+
+var ie = ua.indexOf('msie') != -1 ? parseInt(ua.split('msie')[1]) : false;
 
 var template = [
   '<div class="pageturner-book">',
@@ -91,6 +94,10 @@ function PageTurner(options){
 
   this.options = options;
   this.is3d = has3d && options.has3d;
+
+  if(ie){
+    this.is3d = false;
+  }
 
   this.page_html = [];
   this.pages = [];
@@ -155,18 +162,9 @@ PageTurner.prototype.load_page = function(index){
 
   this.currentpage = index;
 
-  var render_gap = this.options.render_gap || 3;
-  var min = index - render_gap;
-  var max = index + render_gap;
-  if(min<0){
-    min = 0;
-  }
-  if(max>this.page_html.length-1){
-    max = this.page_html.length-1;
-  }
-  
-  for(var i=0; i<this.page_html.length; i++){
-    if(i>=min && i<=max){
+  if(!this.is3d)
+  {
+    for(var i=0; i<this.page_html.length; i++){
       var page = this.create_page(i);
       var o = i==index ? 1 : 0;
       page.left.css({
@@ -177,21 +175,49 @@ PageTurner.prototype.load_page = function(index){
         opacity:o,
         'z-index':0
       })
-
-      if(i==index){
-
-      }
-      else if(i>index){
-        setRotation(page.left, 180);
-      }
-      else if(i<index){
-        setRotation(page.right, -180);
-      }
-    }
-    else{
-      this.remove_page(i);
     }
   }
+  else{
+
+    var render_gap = this.options.render_gap || 3;
+    var min = index - render_gap;
+    var max = index + render_gap;
+    if(min<0){
+      min = 0;
+    }
+    if(max>this.page_html.length-1){
+      max = this.page_html.length-1;
+    }
+
+    for(var i=0; i<this.page_html.length; i++){
+      if(i>=min && i<=max){
+        var page = this.create_page(i);
+        var o = i==index ? 1 : 0;
+        page.left.css({
+          opacity:o,
+          'z-index':0
+        })
+        page.right.css({
+          opacity:o,
+          'z-index':0
+        })
+
+        if(i==index){
+
+        }
+        else if(i>index){
+          setRotation(page.left, 180);
+        }
+        else if(i<index){
+          setRotation(page.right, -180);
+        }
+      }
+      else{
+        this.remove_page(i);
+      }
+    }
+  }
+
 
   self.emit('load', index);
   self.emit('loaded', index);
@@ -219,7 +245,6 @@ PageTurner.prototype.create_page = function(index){
 
     self.processmask(page.left, 0);
     self.processmask(page.right, 0);
-
   }
 
   return this.pages[index];
@@ -251,6 +276,12 @@ PageTurner.prototype.animate_index = function(index){
     return;
   }
 
+  if(!this.is3d)
+  {
+    this.load_page(index)
+    return
+  }
+
   this._target_index = index;
 
   var direction = index<this.currentpage ? -1 : 0;
@@ -260,6 +291,19 @@ PageTurner.prototype.animate_index = function(index){
       self.animate_index(index);
     }
   });
+}
+
+PageTurner.prototype.reset = function(done){
+  this.pages.forEach(function(page){
+    page.left.remove();
+    page.right.remove();
+  })
+
+  this.pages = [];
+
+  this.resize();
+
+  this.load_page(this.currentpage);
 }
 
 PageTurner.prototype.finish_animation = function(done){
@@ -308,9 +352,9 @@ PageTurner.prototype.run_animate = function(direction, done){
   }
 
   if(!this.is3d){
-    self.emit('animate', side, nextpage);
-    self.emit('animated', side, nextpage);
+    
     this.load_page(nextpage);
+    
     return;
   }
 
