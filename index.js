@@ -206,6 +206,7 @@ PageTurner.prototype.load_page = function(index){
 
         }
         else if(i>index){
+          // APPLES CHANGE
           if(this.is3d){
             setRotation(page.left, 180);  
           }
