@@ -61,6 +61,10 @@ var ua = navigator.userAgent.toLowerCase();
 
 var ie = ua.indexOf('msie') != -1 ? parseInt(ua.split('msie')[1]) : false;
 
+if(ua.indexOf('.net')>=0){
+  ie = true
+}
+
 var template = [
   '<div class="pageturner-book">',
   '  <div id="leaves">',
