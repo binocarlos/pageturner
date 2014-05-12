@@ -206,10 +206,14 @@ PageTurner.prototype.load_page = function(index){
 
         }
         else if(i>index){
-          setRotation(page.left, 180);
+          if(this.is3d){
+            setRotation(page.left, 180);  
+          }
         }
         else if(i<index){
-          setRotation(page.right, -180);
+          if(this.is3d){
+            setRotation(page.right, -180);
+          }
         }
       }
       else{
