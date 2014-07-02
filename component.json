@@ -8,7 +8,9 @@
     "component/emitter": "*",
     "component/domify": "*",
     "component/has-translate3d": "*",
-    "juliangruber/prefixed": "*"
+    "juliangruber/prefixed": "*",
+    "component/transform-property": "*",
+    "anthonyshort/after-transition": "*"
   },
   "development": {},
   "license": "MIT",

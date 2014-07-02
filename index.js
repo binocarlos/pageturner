@@ -1,5 +1,6 @@
 var Emitter = require('emitter')
 var domify = require('domify')
+var css = require('css')
 var tools = require('./tools')
 var template = require('./template')
 
@@ -69,11 +70,20 @@ PageTurner.prototype.render = function(){
   }
 
   this.elem = domify(template)
+  this.leaves = this.elem.querySelector('#leaves')
 
+  if(this.is3d){
+    tools.setPerspective(this.leaves, this.options.perspective)  
+  }
+  
   self.page_html.forEach(function(page){
     console.log('-------------------------------------------');
     console.dir(page)
   })
 
   return this.elem[0]
+}
+
+PageTurner.prototype.loadPage = function(index){
+
 }
