@@ -1,58 +1,3 @@
-/*
-
-  Page Turner
-
-
-
-
-Turning Pair (a single page turn = 2 leafs turning at the same time)
-One turns till halfway then triggers the other leaf (which is vertical)
-to complete it's turn
-                        |
-                        |----------
-                        |         |       
-                        \        /
-                        -        _ ----- Turning Leaf
-                        -\      /_       (one of the 4 hot pages 
-                        - \    / _       prev-right + current-left
-                        -  \  /  _       next-left + current-right
-    -----------------------------_-------------------
-    |                   -   |    _                  |
-    |                   -   |    _                  |
-    |                   -   |    _                  |
-    |                   -   |    _                  |
-    |                   -   |    _                  |---- Base leaf 
-    |                   -   |    _                  |     single sided 
-    |                   -   |    _                  |     leafs from the
-    |                   -   |    _                  |     prev / next pages
-    |                   -   |    _                  |
-    |                   -   |    _                  |
-    |                    \  |  /                    |
-    |                     \ | /                     |
-    |                      \|/                      |
-    -------------------------------------------------
-
-
-    -------------------------------------------------
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    |                       |                       |
-    -------------------------------------------------
-    
-  
-  
-*/
-
 var Emitter = require('emitter');
 var $ = require('jquery');
 var transform = require('transform-property');
@@ -75,7 +20,9 @@ var template = [
   '</div>'
 ].join("\n");
 
-module.exports = PageTurner;
+module.exports = function(options){
+  return new PageTurner(options)
+}
 
 var options_defaults = {
   masksize:5,
