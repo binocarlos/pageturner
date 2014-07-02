@@ -80,14 +80,14 @@ PageTurner.prototype.loadFlatPage = function(index){
 
 PageTurner.prototype.load3dPage = function(index){
   var self = this;
-  var renderAhead = this.options.renderAhead || 3;
-  var min = index - renderAhead;
-  var max = index + renderAhead;
+  var renderAhead = this.options.renderAhead || 3
+  var min = index - renderAhead
+  var max = index + renderAhead
   if(min<0){
-    min = 0;
+    min = 0
   }
   if(max>this.pages.length-1){
-    max = this.pages.length-1;
+    max = this.pages.length-1
   }
   this.pages.forEach(function(page, index){
     if(i>=min && i<=max){
