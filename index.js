@@ -73,63 +73,38 @@ PageTurner.prototype.render = function(){
 }
 
 PageTurner.prototype.loadFlatPage = function(index){
-  this.pages.forEach(function(page, index){
-    var o = i==index ? 1 : 0;
-    var leaves = page.render()
-    css(leaves.left, {
-      opacity:o,
-      'z-index':0
-    })
-    css(leaves.right, {
-      opacity:o,
-      'z-index':0
-    })
+  this.pages.forEach(function(page, i){
+    page.setVisible(i==index)
   })
 }
 
 PageTurner.prototype.load3dPage = function(index){
+  var self = this;
   var renderAhead = this.options.renderAhead || 3;
-  var min = index - render_gap;
-  var max = index + render_gap;
+  var min = index - renderAhead;
+  var max = index + renderAhead;
   if(min<0){
     min = 0;
   }
-  if(max>this.page_html.length-1){
-    max = this.page_html.length-1;
+  if(max>this.pages.length-1){
+    max = this.pages.length-1;
   }
-
-  for(var i=0; i<this.page_html.length; i++){
+  this.pages.forEach(function(page, index){
     if(i>=min && i<=max){
-      var page = this.create_page(i);
-      var o = i==index ? 1 : 0;
-      page.left.css({
-        opacity:o,
-        'z-index':0
-      })
-      page.right.css({
-        opacity:o,
-        'z-index':0
-      })
+      page.attach(self.leaves)
+      page.setVisible(i==index)
 
-      if(i==index){
-
-      }
-      else if(i>index){
-        // APPLES CHANGE
-        if(this.is3d){
-          setRotation(page.left, 180);  
-        }
+      if(i>index){
+        page.setRotation('left', 180)
       }
       else if(i<index){
-        if(this.is3d){
-          setRotation(page.right, -180);
-        }
+        page.setRotation('right', -180)
       }
     }
     else{
-      this.remove_page(i);
+      page.remove()
     }
-  }
+  })
 }
 
 PageTurner.prototype.loadPage = function(index){

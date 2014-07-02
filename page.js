@@ -31,22 +31,6 @@ Page.prototype.render = function(){
   return this.page
 }
 
-Page.prototype.attach = function(parent){
-  var page = this.render()
-  parent.appendChild(page.left)
-  parent.appendChild(page.right)
-
-  if(tools.is3d()){
-    this.processmask(this.page.left, 0, parent)
-    this.processmask(this.page.right, 0, parent)
-  }
-}
-
-Page.prototype.remove = function(){
-  var page = this.render()
-  page.left.parentNode.removeChild(page.left)
-  page.right.parentNode.removeChild(page.right)
-}
 
 Page.prototype.createLeaf = function(side){
   var leaf = domify('<div class="leaf nobackside filler"><div class="content filler">' + html + '</div></div>')
@@ -76,7 +60,7 @@ Page.prototype.setLeafRotation = function(side, percent){
 }
 
 
-Page.prototype.processmask = function(leaf, val, parent){
+Page.prototype.processMask = function(leaf, val, parent){
   var size = {
     width:parent.offsetWidth,
     height:parent.offsetHeight
@@ -92,4 +76,43 @@ Page.prototype.processmask = function(leaf, val, parent){
   leaf.css({
     'clip':rect
   })
+}
+
+
+Page.prototype.attach = function(parent){
+  var page = this.render()
+  parent.appendChild(page.left)
+  parent.appendChild(page.right)
+
+  if(tools.is3d()){
+    this.processMask(this.page.left, 0, parent)
+    this.processMask(this.page.right, 0, parent)
+  }
+}
+
+
+Page.prototype.remove = function(){
+  var page = this.render()
+  page.left.parentNode.removeChild(page.left)
+  page.right.parentNode.removeChild(page.right)
+}
+
+Page.prototype.setVisible = function(mode){
+  var o = mode ? 1 : 0;
+  var leaves = this.render()
+  css(leaves.left, {
+    opacity:o,
+    'z-index':0
+  })
+  css(leaves.right, {
+    opacity:o,
+    'z-index':0
+  })
+}
+
+Page.prototype.setRotation = function(side, amount){
+  if(tools.is3d()){
+    var leaves = this.render()
+    tools.setRotation(leaves[side], amount)
+  }
 }
