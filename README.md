@@ -74,6 +74,16 @@ to complete it's turn
     -------------------------------------------------
 ```
 
+## api
+
+### `var book = PageTurner(options)`
+
+Create a new book renderer with the following options:
+
+ * startPage (0) - the page to start on
+ * renderAhead (3) - the number of pages to render ahead/behind the current page
+
+
 ## License
 
 MIT

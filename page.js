@@ -32,14 +32,13 @@ Page.prototype.render = function(){
 }
 
 Page.prototype.attach = function(parent){
-
   var page = this.render()
   parent.appendChild(page.left)
   parent.appendChild(page.right)
 
   if(tools.is3d()){
-    this.processmask(this.page.left, 0, parent);
-    this.processmask(this.page.right, 0, parent);
+    this.processmask(this.page.left, 0, parent)
+    this.processmask(this.page.right, 0, parent)
   }
 }
 
@@ -54,8 +53,6 @@ Page.prototype.createLeaf = function(side){
   leaf.setAttribute('data-side', side)
   return leaf;
 }
-
-
 
 /*
 
