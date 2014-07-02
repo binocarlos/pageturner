@@ -19,16 +19,16 @@ Emitter(Page.prototype)
 Page.prototype.render = function(){
   var self = this;
   
-  if(this.page){
-    return this.page
+  if(this.leaves){
+    return this.leaves
   }
 
-  this.page = {
+  this.leaves = {
     left:this.createLeaf('left'),
     right:this.createLeaf('right')
   }
 
-  return this.page
+  return this.leaves
 }
 
 
@@ -85,8 +85,8 @@ Page.prototype.attach = function(parent){
   parent.appendChild(page.right)
 
   if(tools.is3d()){
-    this.processMask(this.page.left, 0, parent)
-    this.processMask(this.page.right, 0, parent)
+    this.processMask(page.left, 0, parent)
+    this.processMask(page.right, 0, parent)
   }
 }
 

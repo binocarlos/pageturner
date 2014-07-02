@@ -1,54 +1,41 @@
 var tools = require('./tools')
 
 function animator(book){
+
   return function(direction, done){
+
     var side = tools.directionToSide(direction)
     var otherside = tools.otherSide(side)
-    
-    var nextpage = this.currentpage + direction;
+    var nextpage = this.book.nextPage(direction)
 
     if(nextpage<0){
-      return;
-    }
-    if(nextpage>this.page_html.length-1){
-      return;
-    }
-
-    if(!this.is3d){
-      
-      this.load_page(nextpage);
-      
-      return;
+      return
     }
 
     var frontRotation = 0;
     var pageDirection = 0;
+
+    var thisPage = book.getLeaves()
+    var lastPage = book.getLeaves(-1)
+    var nextPage = book.getLeaves(1)
    
     var frontleaf, backleaf, nextleaf, hideleaf;
 
     if(side=='left'){
-      if(self.currentpage - 1<0){
-        return false;
-      }
-      
+
       pageDirection = -1;
       frontRotation = 180;
 
-      this.runningpage = this.currentpage-1;
       hideleaf = this.pages[this.currentpage].right;
       frontleaf = this.pages[this.currentpage].left;
       backleaf = this.pages[this.currentpage - 1].right;
       nextleaf = this.pages[this.currentpage - 1].left;
     }
     else{
-      if(self.currentpage + 1>self.page_html.length-1){
-        return;
-      }
       
       pageDirection = 1;
       frontRotation = -180;
 
-      this.runningpage = this.currentpage+1;
       hideleaf = this.pages[this.currentpage].left;
       frontleaf = this.pages[this.currentpage].right;
       backleaf = this.pages[this.currentpage + 1].left;

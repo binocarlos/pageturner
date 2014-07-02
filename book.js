@@ -13,9 +13,25 @@ function Book(pages){
 
 Emitter(Book.prototype)
 
+Book.prototype.getLeaves = function(offset){
+  var index = this.nextPage(offset)
+  if(index<0){
+    return null
+  }
+  var page = this.pages[index]
+  return page.render()
+}
+
 // create a pair of leaves and populate this.pages
 Book.prototype.nextPage = function(direction){
-  return this.currentPage
+  var nextpage = this.currentPage + direction;
+  if(nextpage<0){
+    return -1
+  }
+  if(nextpage>this.pages.length-1){
+    return -1
+  }
+  return nextpage
 }
 
 Book.prototype.load3dPage = function(parent, index, renderAhead){
