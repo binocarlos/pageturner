@@ -4,6 +4,8 @@ var css = require('css')
 var tools = require('./tools')
 var template = require('./template')
 
+var Page = require('./page')
+
 module.exports = factory
 
 function factory(options){

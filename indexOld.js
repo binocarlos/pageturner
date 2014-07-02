@@ -80,7 +80,7 @@ PageTurner.prototype.render = function(target){
   })
 
   this.book.html(template);
-  
+
   this.leaves = this.book.find('#leaves');
 
   setPerspective(this.leaves, this.options.perspective);
@@ -182,6 +182,29 @@ PageTurner.prototype.load_page = function(index){
   
 }
 
+
+// create a pair of leaves and populate this.pages
+PageTurner.prototype.create_page = function(index){
+  var self = this;
+  if(this.pages[index]){
+    return this.pages[index];
+  }
+  var page = this.pages[index] = {
+    left:this.create_leaf('left', this.get_page_html(index)),
+    right:this.create_leaf('right', this.get_page_html(index))
+  }
+
+  this.leaves.append(this.pages[index].left);
+  this.leaves.append(this.pages[index].right);
+
+  if(this.is3d){
+
+    self.processmask(page.left, 0);
+    self.processmask(page.right, 0);
+  }
+
+  return this.pages[index];
+}
 
 // remove the DOM elements and edit this.pages
 PageTurner.prototype.remove_page = function(index){
@@ -391,6 +414,27 @@ PageTurner.prototype.create_leaf = function(side, html){
   return leaf;
 }
 
+
+/*
+
+  manually set the rotation of either side
+
+  i.e. 'left', .89
+
+  would turn the left hand side .89 * 180 degrees to the right
+
+  i.e. 'right', .89
+
+  would turn the left hand side 180 - (.89 * 180) degrees to the right
+  
+*/
+PageTurner.prototype.set_leaf_rotation = function(side, percent){
+  var leaf = this['leaf' + side];
+
+  var rotation = side=='left' ? (percent * 180) : (180 - (percent * 180));
+
+  setRotation(leaf, rotation);
+}
 
 
 PageTurner.prototype.get_page_html = function(index){

@@ -16,7 +16,7 @@ function Page(html){
 Emitter(Page.prototype)
 
 // create a pair of leaves and populate this.pages
-Page.prototype.render = function(parent){
+Page.prototype.render = function(){
   var self = this;
   
   if(this.page){
@@ -28,13 +28,25 @@ Page.prototype.render = function(parent){
     right:this.createLeaf('right')
   }
 
-  if(tools.is3d()){
+  return this.page
+}
 
+Page.prototype.attach = function(parent){
+
+  var page = this.render()
+  parent.appendChild(page.left)
+  parent.appendChild(page.right)
+
+  if(tools.is3d()){
     this.processmask(this.page.left, 0, parent);
     this.processmask(this.page.right, 0, parent);
   }
+}
 
-  return this.page
+Page.prototype.remove = function(){
+  var page = this.render()
+  page.left.parentNode.removeChild(page.left)
+  page.right.parentNode.removeChild(page.right)
 }
 
 Page.prototype.createLeaf = function(side){
