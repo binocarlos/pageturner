@@ -6,7 +6,12 @@
   "keywords": [],
   "dependencies": {
     "component/emitter": "*",
-    "component/has-translate3d": "*"
+    "component/has-translate3d": "*",
+    "component/transform-property": "*",
+    "component/jquery": "*",
+    "pgherveou/transitionend": "*",
+    "anthonyshort/after-transition": "*",
+    "slifszyc/user-agent": "*"
   },
   "development": {},
   "license": "MIT",
@@ -15,8 +20,7 @@
     "pageturner.css"
   ],
   "scripts": [
-    "index.js",
-    "tools.js"
+    "index.js"
   ],
   "remotes": []
 }
