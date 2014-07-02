@@ -4,18 +4,11 @@
   height:100%;
 }
 
-.pageturner-book #base{
+.pageturner-book .filler{
+  display: block;
   position:absolute;
-}
-
-.pageturner-book .leafedge{
-  background-color: #f00 !important;
+  width:100%;
   height:100%;
-  position: absolute;
-}
-
-.pageturner-book #leaves{
-  position:absolute;
 }
 
 .pageturner-book .nobackside{
@@ -38,28 +31,7 @@
   
 }
 
-.pageturner-book .leafholder{
-  display: block;
-  position: absolute;
-  width:100%;
-  height:100%;
-}
-
-.pageturner-book .leaf{
-  display: block;
-  position: absolute;
-  width:100%;
-  height:100%;  
-}
-
-.pageturner-book .content{
-  display: block;
-  position: absolute;
-  width:100%;
-  height:100%;
-}
-
-.pageturner-book .content img { 
+.pageturner-book img { 
   image-rendering: optimizeQuality;
   overflow: visible !important;
   -webkit-background-clip:padding-box;
