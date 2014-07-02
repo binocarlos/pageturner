@@ -35,11 +35,11 @@ var PageTurner = require('pageturner');
 
 var bookElem = document.querySelectorAll('#mybook')[0]
 
-var book = PageTurner(bookElem, {
-  pageselector:'.page',
+var book = PageTurner(bookElem, '.page', {
   startpage:1
 })
 
+// this will replace the content of the book with the animating version
 book.render()
 ```
 

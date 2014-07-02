@@ -1,16 +1,14 @@
 var Emitter = require('emitter');
+var tools = require('./tools')
+/*
 var $ = require('jquery');
 var transform = require('transform-property');
-var has3d = require('has-translate3d');
+
 var transEndEventName = require("transitionend");
 var afterTransition = require('after-transition');
-var ua = navigator.userAgent.toLowerCase();
+*/
 
-var ie = ua.indexOf('msie') != -1 ? parseInt(ua.split('msie')[1]) : false;
 
-if(ua.indexOf('.net')>=0){
-  ie = true
-}
 
 var template = [
   '<div class="pageturner-book">',
@@ -20,8 +18,8 @@ var template = [
   '</div>'
 ].join("\n");
 
-module.exports = function(options){
-  return new PageTurner(options)
+module.exports = function(elem, pageSelector, options){
+  return new PageTurner(elem, pageSelector, options)
 }
 
 var options_defaults = {
@@ -30,7 +28,10 @@ var options_defaults = {
   perspective:800
 }
 
-function PageTurner(options){
+function PageTurner(elem, pageSelector, options){
+  this.elem = elem
+  this.pageSelector = pageSelector
+
   options = this.options = options || {};
 
   Object.keys(options_defaults || {}).forEach(function(prop){
@@ -39,13 +40,8 @@ function PageTurner(options){
     }
   })
 
-  if (!(this instanceof PageTurner)) return new PageTurner(options);
-
   var self = this;
 
-  Emitter.call(this);
-
-  this.options = options;
   this.is3d = has3d && options.has3d;
 
   if(ie){
@@ -63,6 +59,7 @@ function PageTurner(options){
   }
 }
 
+Emitter(PageTurner.prototype)
 /**
  * Inherit from `Emitter.prototype`.
  */
