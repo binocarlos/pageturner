@@ -18,8 +18,21 @@ var template = [
   '</div>'
 ].join("\n");
 
-module.exports = function(elem, pageSelector, options){
-  return new PageTurner(elem, pageSelector, options)
+function getOptions(options){
+
+  options = options || {};
+
+  Object.keys(options_defaults || {}).forEach(function(prop){
+    if(options[prop]===null || options[prop]===undefined){
+      options[prop] = options_defaults[prop];
+    }
+  })
+
+  return options
+}
+
+module.exports = function(options){
+  return new PageTurner(options)
 }
 
 var options_defaults = {
@@ -28,38 +41,29 @@ var options_defaults = {
   perspective:800
 }
 
-function PageTurner(elem, pageSelector, options){
-  this.elem = elem
-  this.pageSelector = pageSelector
-
-  this.pages = []
-  var pageResults = this.elem.querySelectorAll(this.pageSelector)
-
-  for(var i=0; i<pageResults.length; i++){
-    this.pages.push(pageResults[i])
-  }
-
-  if(this.pages.length<=0){
-    throw new Error('pageturner cannot find any pages for the book');
-  }
-
-  console.dir(this.pages)
-
-  options = this.options = options || {};
-
-  Object.keys(options_defaults || {}).forEach(function(prop){
-    if(options[prop]===null || options[prop]===undefined){
-      options[prop] = options_defaults[prop];
-    }
-  })
-
+function PageTurner(options){
+  this.options = getOptions(options)
   this.is3d = tools.is3d()
-  
-  this.page_html = []
   this.currentpage = 0
+  this.page_html = options.html || []
 }
 
 //Emitter(PageTurner.prototype)
+
+// process the page divs so we have the HTML for them
+PageTurner.prototype.load = function(elem, pageSelector){
+  this.page_html = []
+
+  var pageResults = this.elem.querySelectorAll(this.pageSelector)
+
+  for(var i=0; i<pageResults.length; i++){
+    this.page_html.push(pageResults[i].outerHTML)
+  }
+
+  if(this.page_html.length<=0){
+    throw new Error('pageturner cannot find any pages for the book');
+  }
+}
 
 PageTurner.prototype.render = function(target){
   var self = this;

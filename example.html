@@ -27,14 +27,12 @@
     <script>
 
       var PageTurner = require('pageturner')
-
+      var book = PageTurner()
+      
       var bookElem = document.querySelectorAll('#mybook')[0]
 
-      var book = PageTurner(bookElem, '.page', {
-        startpage:1
-      })
-
-      book.render()
+      book.load(bookElem, '.page')
+      book.render(bookElem)
 
     </script>
   </body>
