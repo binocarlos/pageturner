@@ -1,5 +1,5 @@
 var Emitter = require('emitter')
-var dom = require('dom')
+var domify = require('domify')
 var tools = require('./tools')
 var template = require('./template')
 
@@ -61,23 +61,19 @@ PageTurner.prototype.load = function(elem, pageSelector){
   }
 }
 
-PageTurner.prototype.render = function(target){
+PageTurner.prototype.render = function(){
   var self = this;
 
-  target = target || self.elem
+  if(this.elem){
+    return this.elem
+  }
 
-  this.elem = dom(template)
+  this.elem = domify(template)
 
   self.page_html.forEach(function(page){
     console.log('-------------------------------------------');
     console.dir(page)
   })
 
-  if(target){
-    target.innerHTML = ''
-    target.appendChild(this.elem[0])
-  }
-
   return this.elem[0]
-
 }

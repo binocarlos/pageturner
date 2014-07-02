@@ -6,8 +6,9 @@
   "keywords": [],
   "dependencies": {
     "component/emitter": "*",
-    "component/dom": "*",
-    "component/has-translate3d": "*"
+    "component/domify": "*",
+    "component/has-translate3d": "*",
+    "juliangruber/prefixed": "*"
   },
   "development": {},
   "license": "MIT",

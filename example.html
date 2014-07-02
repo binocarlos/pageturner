@@ -33,7 +33,9 @@
       var bookElem = document.querySelectorAll('#mybook')[0]
 
       book.load(bookElem, '.page')
-      book.render(bookElem)
+
+      bookElem.innerHTML = ''
+      bookElem.appendChild(book.render())
       
     </script>
   </body>
