@@ -1,4 +1,3 @@
-
 .pageturner-book {
   display: block;
   width:100%;
@@ -19,7 +18,7 @@
   position:absolute;
 }
 
-.nobackside{
+.pageturner-book .nobackside{
   -webkit-transform: translate3d(0,0,0);
   -moz-transform: translate3d(0,0,0);
   -ms-transform: translate3d(0,0,0);
@@ -29,7 +28,7 @@
   backface-visibility:hidden;
 }
 
-.maintain3d{
+.pageturner-book .maintain3d{
   
   -webkit-transform-style: preserve-3d;
   -moz-transform-style: preserve-3d;
