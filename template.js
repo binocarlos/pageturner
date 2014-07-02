@@ -1,1 +1,1 @@
-module.exports = '<div class="pageturner-book">\n  <div id="leaves">\n\n	</div>\n</div>';
+module.exports = '<div class="pageturner-book filler">\n  <div id="leaves" class="filler">\n\n	</div>\n</div>';
