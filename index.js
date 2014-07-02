@@ -33,11 +33,11 @@ var options_defaults = {
 function PageTurner(options){
   options = this.options = options || {};
 
-  for(var prop in options_defaults){
+  Object.keys(options_defaults || {}).forEach(function(prop){
     if(options[prop]===null || options[prop]===undefined){
       options[prop] = options_defaults[prop];
     }
-  }
+  })
 
   if (!(this instanceof PageTurner)) return new PageTurner(options);
 
