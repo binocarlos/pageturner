@@ -6,6 +6,7 @@
   "keywords": [],
   "dependencies": {
     "component/emitter": "*",
+    "component/dom": "*",
     "component/has-translate3d": "*"
   },
   "development": {},
@@ -16,7 +17,8 @@
   ],
   "scripts": [
     "index.js",
-    "tools.js"
+    "tools.js",
+    "template.js"
   ],
   "remotes": []
 }

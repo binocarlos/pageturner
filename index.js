@@ -1,5 +1,8 @@
-var Emitter = require('emitter');
+var Emitter = require('emitter')
+var dom = require('dom')
 var tools = require('./tools')
+var template = require('./template')
+
 /*
 var $ = require('jquery');
 var transform = require('transform-property');
@@ -9,14 +12,11 @@ var afterTransition = require('after-transition');
 */
 
 
+module.exports = factory
 
-var template = [
-  '<div class="pageturner-book">',
-  '  <div id="leaves">',
-
-  '  </div>',
-  '</div>'
-].join("\n");
+function factory(options){
+  return new PageTurner(getOptions(options))
+}
 
 function getOptions(options){
 
@@ -31,10 +31,6 @@ function getOptions(options){
   return options
 }
 
-module.exports = function(options){
-  return new PageTurner(options)
-}
-
 var options_defaults = {
   masksize:5,
   animtime:400,
@@ -42,7 +38,7 @@ var options_defaults = {
 }
 
 function PageTurner(options){
-  this.options = getOptions(options)
+  this.options = options
   this.is3d = tools.is3d()
   this.currentpage = 0
   this.page_html = options.html || []
@@ -54,7 +50,7 @@ function PageTurner(options){
 PageTurner.prototype.load = function(elem, pageSelector){
   this.page_html = []
 
-  var pageResults = this.elem.querySelectorAll(this.pageSelector)
+  var pageResults = elem.querySelectorAll(pageSelector)
 
   for(var i=0; i<pageResults.length; i++){
     this.page_html.push(pageResults[i].outerHTML)
@@ -70,9 +66,18 @@ PageTurner.prototype.render = function(target){
 
   target = target || self.elem
 
-  self.pages.forEach(function(page){
+  this.elem = dom(template)
+
+  self.page_html.forEach(function(page){
     console.log('-------------------------------------------');
     console.dir(page)
   })
+
+  if(target){
+    target.innerHTML = ''
+    target.appendChild(this.elem[0])
+  }
+
+  return this.elem[0]
 
 }

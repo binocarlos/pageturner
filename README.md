@@ -33,26 +33,26 @@ Then triggering the book on that content:
 ```js
 var PageTurner = require('pageturner');
 
-var bookElem = document.querySelectorAll('#mybook')[0]
-
-var book = PageTurner(bookElem, '.page', {
+var book = PageTurner(, {
   startpage:1
 })
+
+var bookElem = document.querySelectorAll('#mybook')[0]
+
+book.load(bookElem, '.page')
 
 // this will replace the content of the book with the animating version
 book.render()
 ```
 
-## ascii help
+## ascii idea
 
-```
-Turning Pair (a single page turn = 2 leafs turning at the same time)
+a single page turn = 2 leafs turning at the same time
+
 One turns till halfway then triggers the other leaf (which is vertical)
 to complete it's turn
-                        |
-                        |----------
-                        |         |       
-                        \        /
+
+```
                         -        _ ----- Turning Leaf
                         -\      /_       (one of the 4 hot pages 
                         - \    / _       prev-right + current-left
