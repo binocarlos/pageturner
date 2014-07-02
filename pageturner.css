@@ -61,9 +61,9 @@
 }
 
 .pageturner-book .content img { 
-  image-rendering: optimizeQuality;             /* FUCK SMOOTHING, GIVE ME SPEED  */
+  image-rendering: optimizeQuality;
   overflow: visible !important;
-  -webkit-background-clip:padding-box; /* IOS fix */
-  background-clip:padding-box; /* IOS fix */
-  -ms-interpolation-mode: bicubic;   /* IE8+                           */
+  -webkit-background-clip:padding-box;
+  background-clip:padding-box;
+  -ms-interpolation-mode: bicubic;
 }

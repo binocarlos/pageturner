@@ -3,6 +3,7 @@
   Page Turner
 
 
+
 Turning Pair (a single page turn = 2 leafs turning at the same time)
 One turns till halfway then triggers the other leaf (which is vertical)
 to complete it's turn
