@@ -1,0 +1,36 @@
+<html>  
+  <head>
+    <title>PageTurner Test</title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" type="text/css" href="example.css">
+    <link rel="stylesheet" type="text/css" href="build/build.css">
+  </head>
+  <body>
+
+  	<div id="mybook">
+			<div class="page">
+				page1
+			</div>
+			<div class="page">
+				page2
+			</div>
+			<div class="page">
+				page3
+			</div>
+		</div>
+
+
+    <script src="build/build.js"></script>
+    <script>
+
+      var bookElem = document.querySelectorAll('#mybook')[0]
+
+      var book = PageTurner(bookElem, '.page', {
+        startpage:1
+      })
+
+      book.render()
+
+    </script>
+  </body>
+</html>
