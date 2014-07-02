@@ -2,10 +2,9 @@ var tools = require('./tools')
 
 function animator(book){
   return function(direction, done){
-    var self = this;
-    var side = direction<0 ? 'left' : 'right';
-    var otherside = (side=='left' ? 'right' : 'left');
-
+    var side = tools.directionToSide(direction)
+    var otherside = tools.otherSide(side)
+    
     var nextpage = this.currentpage + direction;
 
     if(nextpage<0){

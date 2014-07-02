@@ -76,6 +76,13 @@ function setPerspective(elem, amount){
 	prefixed(elem.style, 'perspective', amount + 'px')
 }
 
+function directionToSide(direction){
+  return direction<0 ? 'left' : 'right'
+}
+
+function otherSide(side){
+  return side=='left' ? 'right' : 'left'
+}
 
 module.exports = {
 	is3d:is3d,
@@ -83,5 +90,7 @@ module.exports = {
 	removeAnimator:removeAnimator,
 	setPerspective:setPerspective,
 	setZ:setZ,
-	setRotation:setRotation
+	setRotation:setRotation,
+  directionToSide:directionToSide,
+  otherSide:otherSide
 }

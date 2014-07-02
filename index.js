@@ -4,7 +4,16 @@ var css = require('css')
 var tools = require('./tools')
 var template = require('./template')
 
+var Book = require('./book')
 var Page = require('./page')
+
+
+var options_defaults = {
+  masksize:5,
+  animtime:400,
+  perspective:800,
+  renderAhead:3
+}
 
 module.exports = factory
 
@@ -25,16 +34,11 @@ function getOptions(options){
   return options
 }
 
-var options_defaults = {
-  masksize:5,
-  animtime:400,
-  perspective:800
-}
-
 function PageTurner(options){
   this.options = options
   this.is3d = tools.is3d()
   this.currentpage = 0
+
   this.pages = []
 }
 
@@ -42,17 +46,19 @@ Emitter(PageTurner.prototype)
 
 // process the page divs so we have the HTML for them
 PageTurner.prototype.load = function(elem, pageSelector){
-  this.pages = []
+  var pages = []
 
   var pageResults = elem.querySelectorAll(pageSelector)
 
   for(var i=0; i<pageResults.length; i++){
-    this.pages.push(Page(pageResults[i].outerHTML))
+    pages.push(Page(pageResults[i].outerHTML))
   }
 
   if(this.pages.length<=0){
     throw new Error('pageturner cannot find any pages for the book');
   }
+
+  this.book = Book(pages)
 }
 
 PageTurner.prototype.render = function(){
@@ -73,38 +79,15 @@ PageTurner.prototype.render = function(){
 }
 
 PageTurner.prototype.loadFlatPage = function(index){
-  this.pages.forEach(function(page, i){
+  this.book.pages.forEach(function(page, i){
     page.setVisible(i==index)
   })
 }
 
 PageTurner.prototype.load3dPage = function(index){
   var self = this;
-  var renderAhead = this.options.renderAhead || 3
-  var min = index - renderAhead
-  var max = index + renderAhead
-  if(min<0){
-    min = 0
-  }
-  if(max>this.pages.length-1){
-    max = this.pages.length-1
-  }
-  this.pages.forEach(function(page, index){
-    if(i>=min && i<=max){
-      page.attach(self.leaves)
-      page.setVisible(i==index)
-
-      if(i>index){
-        page.setRotation('left', 180)
-      }
-      else if(i<index){
-        page.setRotation('right', -180)
-      }
-    }
-    else{
-      page.remove()
-    }
-  })
+  var renderAhead = 
+  this.book.load3dPage(this.leaves, index, this.options.renderAhead)
 }
 
 PageTurner.prototype.loadPage = function(index){
