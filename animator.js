@@ -1,6 +1,7 @@
 var tools = require('./tools')
+var css = require('css')
 
-function animator(book){
+function animator(options, book){
 
   return function(direction, done){
 
@@ -15,9 +16,9 @@ function animator(book){
     var frontRotation = 0;
     var pageDirection = 0;
 
-    var thisPage = book.getLeaves()
-    var lastPage = book.getLeaves(-1)
-    var nextPage = book.getLeaves(1)
+    var thisLeaves = book.getLeaves()
+    var lastLeaves = book.getLeaves(-1)
+    var nextLeaves = book.getLeaves(1)
    
     var frontleaf, backleaf, nextleaf, hideleaf;
 
@@ -26,52 +27,55 @@ function animator(book){
       pageDirection = -1;
       frontRotation = 180;
 
-      hideleaf = this.pages[this.currentpage].right;
-      frontleaf = this.pages[this.currentpage].left;
-      backleaf = this.pages[this.currentpage - 1].right;
-      nextleaf = this.pages[this.currentpage - 1].left;
+      hideleaf = thisLeaves.right
+      frontleaf = thisLeaves.left
+      backleaf = lastLeaves.right
+      nextleaf = lastLeaves.left
+
     }
     else{
       
       pageDirection = 1;
       frontRotation = -180;
 
-      hideleaf = this.pages[this.currentpage].left;
-      frontleaf = this.pages[this.currentpage].right;
-      backleaf = this.pages[this.currentpage + 1].left;
-      nextleaf = this.pages[this.currentpage + 1].right;
+      hideleaf = thisLeaves.left;
+      frontleaf = thisLeaves.right;
+      backleaf = nextLeaves.left;
+      nextleaf = nextLeaves.right;
     }
 
-    setupAnimator(frontleaf, 'before', self.options.animtime, function(){
+    tools.setupAnimator(frontleaf, 'before', options.animtime, function(){
     
-    });
+    })
 
-    setupAnimator(backleaf, 'before', self.options.animtime, function(){
+    tools.setupAnimator(backleaf, 'before', options.animtime, function(){
 
-      self.runningpage = null;
-      setZ(hideleaf, 0);
-      self.load_page(self.currentpage + pageDirection);
-      self.finish_animation(done);
+      tools.setZ(hideleaf, 0)
+
+      //self.load_page(self.currentpage + pageDirection)
+      //self.finish_animation(done)
+
+      done()
       
     });
 
-    setZ(hideleaf, -1);
+    tools.setZ(hideleaf, -1)
 
-    backleaf.css({
+    css(backleaf, {
       opacity:1,
       'z-index':1000
     })
 
-    frontleaf.css({
+    css(frontleaf, {
       opacity:1,
       'z-index':1000
     })
 
-    nextleaf.css({
+    css(nextleaf, {
       opacity:1
     })
 
-    setRotation(frontleaf, frontRotation);
-    setRotation(backleaf, 0);
+    tools.setRotation(frontleaf, frontRotation)
+    tools.setRotation(backleaf, 0)
   }
 }
