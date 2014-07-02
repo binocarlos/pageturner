@@ -45,9 +45,7 @@ PageTurner.prototype.load = function(elem, pageSelector){
   var pageResults = elem.querySelectorAll(pageSelector)
 
   for(var i=0; i<pageResults.length; i++){
-    this.pages.push(Page({
-      html:pageResults[i].outerHTML
-    })
+    this.pages.push(Page(pageResults[i].outerHTML))
   }
 
   if(this.pages.length<=0){

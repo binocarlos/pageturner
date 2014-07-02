@@ -2,51 +2,44 @@ var Emitter = require('emitter')
 var domify = require('domify')
 var css = require('css')
 var tools = require('./tools')
-var template = require('./pagetemplate')
 
 module.exports = factory
 
-function factory(options){
-  return new Page(options)
+function factory(html){
+  return new Page(html)
 }
 
-function Page(options){
-  this.options = options
+function Page(html){
+  this.html = html
 }
 
 Emitter(Page.prototype)
 
 // create a pair of leaves and populate this.pages
-Page.prototype.render = function(index){
+Page.prototype.render = function(parent){
   var self = this;
-  if(this.pages[index]){
-    return this.pages[index];
-  }
-  var page = this.pages[index] = {
-    left:this.create_leaf('left', this.get_page_html(index)),
-    right:this.create_leaf('right', this.get_page_html(index))
+  
+  if(this.page){
+    return this.page
   }
 
-  this.leaves.append(this.pages[index].left);
-  this.leaves.append(this.pages[index].right);
-
-  if(this.is3d){
-
-    self.processmask(page.left, 0);
-    self.processmask(page.right, 0);
+  this.page = {
+    left:this.createLeaf('left'),
+    right:this.createLeaf('right')
   }
 
-  return this.pages[index];
+  if(tools.is3d()){
+
+    this.processmask(this.page.left, 0, parent);
+    this.processmask(this.page.right, 0, parent);
+  }
+
+  return this.page
 }
 
-Page.prototype.createLeaf = function(elem, pageSelector){
-  var leaf = $('<div class="leaf nobackside"><div class="content">' + html + '</div></div>');
-  if(this.options.apply_pageclass){
-    leaf.find('.content').addClass(this.options.apply_pageclass);
-  }
-  leaf.attr('data-side', side);
-  leaf.width(this.size.width).height(this.size.height);
-  
+Page.prototype.createLeaf = function(side){
+  var leaf = domify('<div class="leaf nobackside filler"><div class="content filler">' + html + '</div></div>')
+  leaf.setAttribute('data-side', side)
   return leaf;
 }
 
@@ -74,8 +67,11 @@ Page.prototype.setLeafRotation = function(side, percent){
 }
 
 
-Page.prototype.processmask = function(leaf, val){
-  var size = this.size;
+Page.prototype.processmask = function(leaf, val, parent){
+  var size = {
+    width:parent.offsetWidth,
+    height:parent.offsetHeight
+  }
 
   var usemask = arguments.length==2 ? val : 0;
 
@@ -86,5 +82,5 @@ Page.prototype.processmask = function(leaf, val){
 
   leaf.css({
     'clip':rect
-  }) 
+  })
 }
