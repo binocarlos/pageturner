@@ -54,10 +54,13 @@ PageTurner.prototype.load = function(elem, pageSelector){
     pages.push(Page(pageResults[i].outerHTML))
   }
 
-  if(this.pages.length<=0){
+  if(pages.length<=0){
     throw new Error('pageturner cannot find any pages for the book');
   }
 
+  console.log('-------------------------------------------');
+  console.log('load')
+  console.dir(pages)
   this.book = Book(pages)
 }
 
@@ -74,8 +77,8 @@ PageTurner.prototype.render = function(){
   if(this.is3d){
     tools.setPerspective(this.leaves, this.options.perspective)  
   }
-  
-  return this.elem[0]
+
+  return this.elem
 }
 
 PageTurner.prototype.loadFlatPage = function(index){

@@ -33,7 +33,7 @@ Page.prototype.render = function(){
 
 
 Page.prototype.createLeaf = function(side){
-  var leaf = domify('<div class="leaf nobackside filler"><div class="content filler">' + html + '</div></div>')
+  var leaf = domify('<div class="leaf nobackside filler"><div class="content filler">' + this.html + '</div></div>')
   leaf.setAttribute('data-side', side)
   return leaf;
 }
@@ -69,11 +69,11 @@ Page.prototype.processMask = function(leaf, val, parent){
   var usemask = arguments.length==2 ? val : 0;
 
   // clip: rect(<top>, <right>, <bottom>, <left>);
-  var rect = leaf.attr('data-side') == 'left' ? 
+  var rect = leaf.getAttribute('data-side') == 'left' ? 
     'rect(0px, ' + (Math.ceil(size.width/2)+usemask) + 'px, ' + (size.height) + 'px, 0px)' :
     'rect(0px, ' + (size.width) + 'px, ' + (size.height) + 'px, ' + (Math.floor(size.width/2)-usemask) + 'px)'
 
-  leaf.css({
+  css(leaf, {
     'clip':rect
   })
 }

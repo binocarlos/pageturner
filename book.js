@@ -45,7 +45,7 @@ Book.prototype.load3dPage = function(parent, index, renderAhead){
     max = this.pages.length-1
   }
 
-  this.book.pages.forEach(function(page, i){
+  this.pages.forEach(function(page, i){
     if(i>=min && i<=max){
       page.attach(parent)
       page.setVisible(i==index)
