@@ -28,14 +28,8 @@
 
       var PageTurner = require('pageturner')
       var book = PageTurner()
-      
-      var bookElem = document.querySelectorAll('#mybook')[0]
 
-      book.load(bookElem, '.page')
-
-      bookElem.innerHTML = ''
-      bookElem.appendChild(book.render())
-
+      book.loadAndReplace(document.querySelector('#mybook'), '.page')
       book.loadPage(0)
       
     </script>

@@ -58,10 +58,13 @@ PageTurner.prototype.load = function(elem, pageSelector){
     throw new Error('pageturner cannot find any pages for the book');
   }
 
-  console.log('-------------------------------------------');
-  console.log('load')
-  console.dir(pages)
   this.book = Book(pages)
+}
+
+PageTurner.prototype.loadAndReplace = function(elem, pageSelector){
+  this.load(elem, pageSelector)
+  elem.innerHTML = ''
+  elem.appendChild(this.render())
 }
 
 PageTurner.prototype.render = function(){

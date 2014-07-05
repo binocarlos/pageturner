@@ -11,3 +11,8 @@ html,body{
 	border:1px solid #000;
 	margin:50px;
 }
+
+#mybook .page .title{
+	margin:20px;
+	font-size:2em;
+}
