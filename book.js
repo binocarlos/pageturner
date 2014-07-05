@@ -1,4 +1,5 @@
 var tools = require('./tools')
+var Emitter = require('emitter')
 
 module.exports = factory
 
