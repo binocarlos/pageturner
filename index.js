@@ -6,7 +6,7 @@ var template = require('./template')
 
 var Book = require('./book')
 var Page = require('./page')
-
+var Animator = require('./animator')
 
 var options_defaults = {
   masksize:5,
@@ -38,7 +38,7 @@ function PageTurner(options){
   this.options = options
   this.is3d = tools.is3d()
   this.currentpage = 0
-
+  this.active = true
   this.pages = []
 }
 
@@ -59,6 +59,7 @@ PageTurner.prototype.load = function(elem, pageSelector){
   }
 
   this.book = Book(pages)
+  this.animator = Animator(this.book, this.options)
 }
 
 PageTurner.prototype.loadAndReplace = function(elem, pageSelector){
@@ -102,4 +103,23 @@ PageTurner.prototype.loadPage = function(index){
   }
   this.currentpage = index
   this.is3d ? this.load3dPage(index) : this.loadFlatPage(index)
+}
+
+PageTurner.prototype.turnDirection = function(direction, done){
+  var self = this;
+  if(!this.active){
+    this._finishfn = function(){
+      self.turnDirection(direction, done)
+    }
+    return
+  }
+  this.active = false
+  this.animator(direction, function(){
+    console.log('-------------------------------------------');
+    console.log('animated!')
+  })
+}
+
+PageTurner.prototype.turnToPage = function(index, done){
+
 }

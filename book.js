@@ -15,16 +15,19 @@ function Book(pages){
 Emitter(Book.prototype)
 
 Book.prototype.getLeaves = function(offset){
-  var index = this.nextPage(offset)
+  offset = offset || 0
+  console.log(offset)
+  console.log(this.currentPage)
+  var index = this.getNextPageNumber(offset)
   if(index<0){
     return null
   }
+  console.log(index)
   var page = this.pages[index]
   return page.render()
 }
 
-// create a pair of leaves and populate this.pages
-Book.prototype.nextPage = function(direction){
+Book.prototype.getNextPageNumber = function(direction){
   var nextpage = this.currentPage + direction;
   if(nextpage<0){
     return -1

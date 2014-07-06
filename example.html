@@ -8,20 +8,24 @@
   <body>
 
   	<div id="mybook">
-			<div class="page">
+			<div class="page page1">
 				<div class="title">page1</div>
-        <div class="text">sdfklj sdflkjsd flkjsdf lkjsdf lksdjf lskdjf lsdkfj sdlkjfh skdjh</div>
+        <div class="text">page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1 page1</div>
 			</div>
-			<div class="page">
+			<div class="page page2">
 				<div class="title">page2</div>
-        <div class="text"> sdfjij ;lkjopjouioui eoue oieu oeiueiy eiuye oiye</div>
+        <div class="text">page2 page2 page2 page2 page2 page2 page2 page2 page2 page2 page2 page2 page2 page2 page2 page2 page2 page2 page2 page2 page2 page2 page2 page2 page2 page2 page2 page2 page2 page2 page2 page2</div>
 			</div>
-			<div class="page">
+			<div class="page page3">
 				<div class="title">page3</div>
-        <div class="text">sdfklj sdflkjsd flkjsdf lkjsdf lksdjf lskdjf lsdkfj sdlkjfh skdjh</div>
+        <div class="text">page3 page3 page3 page3 page3 page3 page3 page3 page3 page3 page3 page3 page3 page3 page3 page3 page3 page3 page3 page3 page3 page3 page3 page3 page3 page3 page3 page3 page3 page3 page3 page3</div>
 			</div>
 		</div>
 
+    <div id="buttons">
+      <button id="prev">Prev Page</button>
+      <button id="next">Next Page</button>
+    </div>
 
     <script src="build/build.js"></script>
     <script>
@@ -31,6 +35,14 @@
 
       book.loadAndReplace(document.querySelector('#mybook'), '.page')
       book.loadPage(0)
+
+      document.querySelector('#prev').addEventListener('click', function(){
+        book.turnDirection(-1)
+      })
+
+      document.querySelector('#next').addEventListener('click', function(){
+        book.turnDirection(1)
+      })
       
     </script>
   </body>

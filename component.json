@@ -24,6 +24,7 @@
     "tools.js",
     "book.js",
     "page.js",
+    "animator.js",
     "template.js"
   ],
   "remotes": []

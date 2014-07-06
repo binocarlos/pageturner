@@ -1,13 +1,21 @@
 var tools = require('./tools')
 var css = require('css')
 
-function animator(options, book){
+module.exports = animator
+
+function animator(book, options){
+
+  if(!book){
+    throw new Error('book must be passed to an animator')
+  }
+
+  options = options || {}
 
   return function(direction, done){
 
     var side = tools.directionToSide(direction)
     var otherside = tools.otherSide(side)
-    var nextpage = this.book.nextPage(direction)
+    var nextpage = book.getNextPageNumber(direction)
 
     if(nextpage<0){
       return
@@ -44,11 +52,11 @@ function animator(options, book){
       nextleaf = nextLeaves.right;
     }
 
-    tools.setupAnimator(frontleaf, 'before', options.animtime, function(){
+    tools.setupAnimator(frontleaf, 'before', options.animtime || 500, function(){
     
     })
 
-    tools.setupAnimator(backleaf, 'before', options.animtime, function(){
+    tools.setupAnimator(backleaf, 'before', options.animtime || 500, function(){
 
       tools.setZ(hideleaf, 0)
 
