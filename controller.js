@@ -10,6 +10,9 @@ module.exports = PageTurner
 function PageTurner(options){
   this.options = options
   this.book = Book(this.options)
+  this.book.on('page', function(i){
+    self.emit('page', i)
+  })
 }
 
 Emitter(PageTurner.prototype)

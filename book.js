@@ -67,6 +67,7 @@ Book.prototype.getNextPageNumber = function(direction){
 
 Book.prototype.loadPage = function(index, done){
   this._currentPage = index
+  this.emit('page', index)
   tools.is3d() ? this.load3dPage(index, done) : this.loadFlatPage(index, done)
 }
 
