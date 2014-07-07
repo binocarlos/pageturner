@@ -41,6 +41,14 @@
       book.render(bookElem)
       book.loadPage(0)
 
+      book.on('page', function(index){
+        console.log('viewing page: ' + index)
+      })
+
+      book.on('leaf', function(leafElement){
+        // leafElement is a one half page that is currently viewable  
+      })
+
       document.querySelector('#prev').addEventListener('click', function(){
         book.turnDirection(-1)
       })

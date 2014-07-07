@@ -14,7 +14,6 @@ $ component install binocarlos/pageturner
 An example of some HTML book content:
 
 ```html
-<script src"build/build.js"></script>
 <div id="mybook">
 	<div class="page">
 		page1
@@ -26,26 +25,97 @@ An example of some HTML book content:
 		page3
 	</div>
 </div>
+<div id="buttons">
+  <button id="prev">Prev Page</button>
+  <button id="next">Next Page</button>
+  <button id="first">First Page</button>
+  <button id="last">Last Page</button>
+</div>
 ```
 
 Then triggering the book on that content:
 
 ```js
-var PageTurner = require('pageturner');
+var PageTurner = require('pageturner')
+var book = PageTurner()
 
-var book = PageTurner(, {
-  startpage:1
-})
-
-var bookElem = document.querySelectorAll('#mybook')[0]
+var bookElem = document.querySelector('#mybook')
 
 book.load(bookElem, '.page')
+book.render(bookElem)
+book.loadPage(0)
 
-// this will replace the content of the book with the animating version
-book.render()
+book.on('page', function(index){
+    console.log('viewing page: ' + index)
+})
+
+book.on('leaf', function(leafElement){
+    // leafElement is a one half page that is currently viewable  
+})
+
+document.querySelector('#prev').addEventListener('click', function(){
+    book.turnDirection(-1)
+})
+
+document.querySelector('#next').addEventListener('click', function(){
+    book.turnDirection(1)
+})
+
+document.querySelector('#first').addEventListener('click', function(){
+    book.turnToPage(0)
+})
+
+document.querySelector('#last').addEventListener('click', function(){
+    book.turnToPage(2)
+})
 ```
 
-## ascii idea
+## api
+
+### `var book = PageTurner(options)`
+
+Create a new book with the following options:
+
+ * startPage (0) - the page to start on
+ * renderAhead (3) - the number of pages to render ahead/behind the current page
+
+### `book.load(domElement, pageSelector)`
+
+Load page data from a DOM element - each page html will be slurped from the DOM elements within 'domElement' and matching 'pageSelector'
+
+### `book.load(pageDataArray)`
+
+Load page data from a POJO array - each page object should have a 'html' property.
+
+You can also pass an array of strings where each string is the HTML for the page.
+
+### `book.render(target)`
+
+Get the DOM element for the book.  You can append this to an existing element or pass the target to append the book element onto.
+
+```js
+document.querySelector('#myholder').appendChild(book.render())
+
+book.render(document.querySelector('#myholder'))
+```
+
+### `book.loadPage(index)`
+
+This will not animate the book but is used to immediately change the page that is viewable
+
+### `book.turnDirection(direction)`
+
+Pass 1 to move forward a page or -1 to move backwards a page.
+
+This will have no effect if the new page is outside boundaries (<0 || >pages.length)
+
+### `book.turnToPage(index, animTime)`
+
+Cycle through pages until you get to the passed index.
+
+You can pass an overridden animTime to make the pages skip faster than usual.
+
+## ascii
 
 a single page turn = 2 leafs turning at the same time
 
@@ -73,16 +143,6 @@ to complete it's turn
     |                      \|/                      |
     -------------------------------------------------
 ```
-
-## api
-
-### `var book = PageTurner(options)`
-
-Create a new book renderer with the following options:
-
- * startPage (0) - the page to start on
- * renderAhead (3) - the number of pages to render ahead/behind the current page
-
 
 ## License
 
