@@ -19,9 +19,14 @@ function Book(options){
 Emitter(Book.prototype)
 
 Book.prototype.setData = function(pageData){
+  var self = this;
   pageData = pageData || []
   this._pages = pageData.map(function(data){
-    return Page(data)
+    var page = Page(data)
+    page.on('render', function(leaf){
+      self.emit('render', leaf)
+    })
+    return page
   })
 }
 
@@ -67,8 +72,12 @@ Book.prototype.getNextPageNumber = function(direction){
 
 Book.prototype.loadPage = function(index, done){
   this._currentPage = index
-  this.emit('page', index)
   tools.is3d() ? this.load3dPage(index, done) : this.loadFlatPage(index, done)
+  this.emit('page', index)
+  var page = this._pages[index]
+  var leaves = page.render()
+  this.emit('leaf', leaves.left)
+  this.emit('leaf', leaves.right)
 }
 
 Book.prototype.loadFlatPage = function(index, done){
