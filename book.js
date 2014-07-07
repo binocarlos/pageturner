@@ -113,7 +113,9 @@ Book.prototype.turnDirection = function(direction, done){
   }
 
   this._active = false
-  this._animator(side, function(){
+  this._animator(side, function(i){
+    return self.getLeaves(i)
+  }, function(){
     if(self._finishfn){
       self._finishfn()
       self._finishfn = null

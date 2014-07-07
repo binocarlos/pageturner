@@ -7,16 +7,16 @@ function animator(options){
 
   options = options || {}
 
-  return function(book, side, done){
+  return function(side, getLeaves, done){
 
     var otherside = tools.otherSide(side)
 
     var frontRotation = 0;
     var pageDirection = 0;
 
-    var thisLeaves = book.getLeaves()
-    var lastLeaves = book.getLeaves(-1)
-    var nextLeaves = book.getLeaves(1)
+    var thisLeaves = getLeaves()
+    var lastLeaves = getLeaves(-1)
+    var nextLeaves = getLeaves(1)
    
     var frontleaf, backleaf, nextleaf, hideleaf;
 
