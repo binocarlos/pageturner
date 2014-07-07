@@ -62,16 +62,18 @@ PageTurner.prototype.load = function(elem, pageSelector){
   this.animator = Animator(this.book, this.options)
 }
 
-PageTurner.prototype.loadAndReplace = function(elem, pageSelector){
-  this.load(elem, pageSelector)
-  elem.innerHTML = ''
-  elem.appendChild(this.render())
-}
-
 PageTurner.prototype.render = function(target){
   var self = this;
 
+  function writeBookToTarget(){
+    if(target){
+      target.innerHTML = ''
+      target.appendChild(this.elem)
+    }
+  }
+
   if(this.elem){
+    writeBookToTarget()
     return this.elem
   }
 
@@ -87,6 +89,7 @@ PageTurner.prototype.render = function(target){
     target.appendChild(this.elem)
   }
 
+  writeBookToTarget()
   return this.elem
 }
 
