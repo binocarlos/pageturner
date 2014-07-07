@@ -5,8 +5,8 @@ var Page = require('./page')
 
 module.exports = factory
 
-function factory(pages){
-  return new Book(pages)
+function factory(options){
+  return new Book(options)
 }
 
 function Book(options){
@@ -21,11 +21,7 @@ Emitter(Book.prototype)
 Book.prototype.setData = function(pageData){
   pageData = pageData || []
   this._pages = pageData.map(function(data){
-    if(typeof(data)==='string'){
-      data = {
-        html:data
-      }
-    }
+    return Page(data)
   })
 }
 
@@ -108,10 +104,9 @@ Book.prototype.turnDirection = function(direction, done){
     return
   }
   
-  
   var nextpage = this.getNextPageNumber(direction)
   var side = tools.directionToSide(direction)
-  
+
   if(nextpage<0){
     done && done()
     return

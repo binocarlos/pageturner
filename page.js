@@ -5,13 +5,18 @@ var tools = require('./tools')
 
 module.exports = factory
 
-function factory(html){
-  return new Page(html)
+function factory(data){
+  return new Page(data)
 }
 
-function Page(html, meta){
-  this._html = html
-  this._meta = meta || {}
+function Page(data){
+  if(typeof(data)==='string'){
+    data = {
+      html:data
+    }
+  }
+  this._html = data.html
+  this._meta = data
 }
 
 Emitter(Page.prototype)

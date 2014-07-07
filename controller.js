@@ -87,30 +87,7 @@ PageTurner.prototype.loadPage = function(index){
 }
 
 PageTurner.prototype.turnDirection = function(direction, done){
-  var self = this;
-  if(!this.active){
-    this._finishfn = function(){
-      console.log('run fuinish fn')
-      self.turnDirection(direction, done)
-    }
-    return
-  }
-  this.active = false
-  var nextpage = book.getNextPageNumber(direction)
-  if(nextpage<0){
-    done && done()
-    return
-  }
-  var side = tools.directionToSide(direction)
-  this.animator(direction, function(){
-    if(self._finishfn){
-      self._finishfn()
-      self._finishfn = null
-    }
-    else{
-      self.active = true
-    }
-  })
+  this.book.turnDirection(direction, done)
 }
 
 PageTurner.prototype.turnToPage = function(index, done){
