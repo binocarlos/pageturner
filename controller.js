@@ -64,11 +64,7 @@ PageTurner.prototype.render = function(target){
   }
 
   this.elem = domify(template)
-  this.leaves = this.elem.querySelector('#leaves')
-
-  if(tools.is3d()){
-    tools.setPerspective(this.leaves, this.options.perspective)  
-  }
+  this.book.setElement(this.elem)
 
   if(target){
     target.innerHTML = ''
@@ -83,11 +79,13 @@ PageTurner.prototype.loadPage = function(index){
   if(!this.elem){
     throw new Error('you must call .render() before you can call loadPage')
   }
-  this.book.loadPage(index, this.leaves)
+  this.book.loadPage(index)
 }
 
 PageTurner.prototype.turnDirection = function(direction, done){
-  this.book.turnDirection(direction, done)
+  this.book.turnDirection(direction, function(){
+
+  })
 }
 
 PageTurner.prototype.turnToPage = function(index, done){
