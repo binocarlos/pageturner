@@ -109,6 +109,7 @@ PageTurner.prototype.loadPage = function(index){
     throw new Error('you must call .render() before you can call loadPage')
   }
   this.currentpage = index
+  this.leaves.innerHTML = ''
   this.is3d ? this.load3dPage(index) : this.loadFlatPage(index)
 }
 
