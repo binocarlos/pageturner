@@ -98,18 +98,15 @@ Page.prototype.remove = function(){
 }
 
 Page.prototype.setVisible = function(mode){
-  var o = mode ? 1 : 0;
+  var o = mode ? '1' : '0';
   var leaves = this.render()
-  console.log('-------------------------------------------');
-  console.log('visible')
-  console.log(mode)
   css(leaves.left, {
     opacity:o,
-    'z-index':0
+    'z-index':'0'
   })
   css(leaves.right, {
     opacity:o,
-    'z-index':0
+    'z-index':'0'
   })
 }
 
