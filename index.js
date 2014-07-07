@@ -65,15 +65,15 @@ PageTurner.prototype.load = function(elem, pageSelector){
 PageTurner.prototype.render = function(target){
   var self = this;
 
-  function writeBookToTarget(){
+  function writeBookToTarget(e){
     if(target){
       target.innerHTML = ''
-      target.appendChild(this.elem)
+      target.appendChild(e)
     }
   }
 
   if(this.elem){
-    writeBookToTarget()
+    writeBookToTarget(this.elem)
     return this.elem
   }
 
@@ -89,7 +89,7 @@ PageTurner.prototype.render = function(target){
     target.appendChild(this.elem)
   }
 
-  writeBookToTarget()
+  writeBookToTarget(this.elem)
   return this.elem
 }
 
