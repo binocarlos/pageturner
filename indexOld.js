@@ -1,12 +1,12 @@
 var Emitter = require('emitter');
 var tools = require('./tools')
-/*
+
 var $ = require('jquery');
 var transform = require('transform-property');
 
 var transEndEventName = require("transitionend");
 var afterTransition = require('after-transition');
-*/
+
 
 
 
