@@ -16,13 +16,10 @@ Emitter(Book.prototype)
 
 Book.prototype.getLeaves = function(offset){
   offset = offset || 0
-  console.log(offset)
-  console.log(this.currentPage)
   var index = this.getNextPageNumber(offset)
   if(index<0){
     return null
   }
-  console.log(index)
   var page = this.pages[index]
   return page.render()
 }
