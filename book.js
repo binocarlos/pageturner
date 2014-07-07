@@ -97,3 +97,34 @@ Book.prototype.load3dPage = function(index, leaves){
     }
   })
 }
+
+Book.prototype.turnDirection = function(direction, done){
+  var self = this;
+  if(!this._active){
+    this._finishfn = function(){
+      console.log('run fuinish fn')
+      self.turnDirection(direction, done)
+    }
+    return
+  }
+  
+  
+  var nextpage = this.getNextPageNumber(direction)
+  var side = tools.directionToSide(direction)
+  
+  if(nextpage<0){
+    done && done()
+    return
+  }
+
+  this._active = false
+  this._animator(side, function(){
+    if(self._finishfn){
+      self._finishfn()
+      self._finishfn = null
+    }
+    else{
+      self._active = true
+    }
+  })
+}
