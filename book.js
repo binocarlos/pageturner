@@ -47,11 +47,10 @@ Book.prototype.load3dPage = function(parent, index, renderAhead){
   if(max>this.pages.length-1){
     max = this.pages.length-1
   }
-
   this.pages.forEach(function(page, i){
+    page.setVisible(i==index)
     if(i>=min && i<=max){
       page.attach(parent)
-      page.setVisible(i==index)
       if(i>index){
         page.setRotation('left', 180)
       }
