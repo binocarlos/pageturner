@@ -3,23 +3,13 @@ var css = require('css')
 
 module.exports = animator
 
-function animator(book, options){
-
-  if(!book){
-    throw new Error('book must be passed to an animator')
-  }
+function animator(options){
 
   options = options || {}
 
-  return function(direction, done){
+  return function(book, side, done){
 
-    var side = tools.directionToSide(direction)
     var otherside = tools.otherSide(side)
-    var nextpage = book.getNextPageNumber(direction)
-
-    if(nextpage<0){
-      return
-    }
 
     var frontRotation = 0;
     var pageDirection = 0;

@@ -9,8 +9,9 @@ function factory(html){
   return new Page(html)
 }
 
-function Page(html){
-  this.html = html
+function Page(html, meta){
+  this._html = html
+  this._meta = meta || {}
 }
 
 Emitter(Page.prototype)
@@ -33,7 +34,7 @@ Page.prototype.render = function(){
 
 
 Page.prototype.createLeaf = function(side){
-  var leaf = domify('<div class="leaf nobackside filler"><div class="content filler">' + this.html + '</div></div>')
+  var leaf = domify('<div class="leaf nobackside filler"><div class="content filler">' + this._html + '</div></div>')
   leaf.setAttribute('data-side', side)
   return leaf;
 }

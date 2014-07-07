@@ -21,6 +21,7 @@
   ],
   "scripts": [
     "index.js",
+    "controller.js",
     "tools.js",
     "book.js",
     "page.js",
