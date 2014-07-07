@@ -9,12 +9,12 @@ module.exports = PageTurner
 
 function PageTurner(options){
   this.options = options
-  this.active = true
   this.book = Book(this.options)
 }
 
 Emitter(PageTurner.prototype)
 
+// load either from a dom node or array of page objects with .html
 PageTurner.prototype.load = function(data, pageSelector){
   if(!data.nodeName) {
     this.loadData(data)
@@ -66,7 +66,7 @@ PageTurner.prototype.render = function(target){
   this.elem = domify(template)
   this.leaves = this.elem.querySelector('#leaves')
 
-  if(this.book.is3d()){
+  if(tools.is3d()){
     tools.setPerspective(this.leaves, this.options.perspective)  
   }
 
@@ -79,22 +79,11 @@ PageTurner.prototype.render = function(target){
   return this.elem
 }
 
-PageTurner.prototype.loadFlatPage = function(index){
-  this.book.pages.forEach(function(page, i){
-    page.setVisible(i==index)
-  })
-}
-
-PageTurner.prototype.load3dPage = function(index){
-  var self = this;
-  this.book.load3dPage(this.leaves, index, this.options.renderAhead)
-}
-
 PageTurner.prototype.loadPage = function(index){
   if(!this.elem){
     throw new Error('you must call .render() before you can call loadPage')
   }
-  
+  this.book.loadPage(index, this.leaves)
 }
 
 PageTurner.prototype.turnDirection = function(direction, done){

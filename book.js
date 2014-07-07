@@ -12,8 +12,8 @@ function factory(pages){
 function Book(options){
   this._options = options || {}
   this._currentPage = 0
-  this._is3d = tools.is3d()
-  this.animator = Animator(this._options)
+  this._active = true
+  this._animator = Animator(this._options)
 }
 
 Emitter(Book.prototype)
@@ -27,10 +27,6 @@ Book.prototype.setData = function(pageData){
       }
     }
   })
-}
-
-Book.prototype.is3d = function(){
-  return this._is3d
 }
 
 Book.prototype.pages = function(){
@@ -65,20 +61,20 @@ Book.prototype.getNextPageNumber = function(direction){
   return nextpage
 }
 
-Book.prototype.loadPage = function(index){
-  this.currentpage = index
-  this.is3d ? this.load3dPage(index) : this.loadFlatPage(index)
+Book.prototype.loadPage = function(index, leaves){
+  this._currentPage = index
+  tools.is3d() ? this.load3dPage(index, leaves) : this.loadFlatPage(index, leaves)
 }
 
-Book.prototype.loadFlatPage = function(index){
+Book.prototype.loadFlatPage = function(index, leaves){
   this._pages.forEach(function(page, i){
     page.setVisible(i==index)
   })
 }
 
-Book.prototype.load3dPage = function(parent, index, renderAhead){
-  var min = index - renderAhead
-  var max = index + renderAhead
+Book.prototype.load3dPage = function(index, leaves){
+  var min = index - this._options.renderAhead
+  var max = index + this._options.renderAhead
   if(min<0){
     min = 0
   }
@@ -87,7 +83,7 @@ Book.prototype.load3dPage = function(parent, index, renderAhead){
   }
   this._pages.forEach(function(page, i){
     if(i>=min && i<=max){
-      page.attach(parent)
+      page.attach(leaves)
       page.setVisible(i==index)
       if(i>index){
         page.setRotation('left', 180)
