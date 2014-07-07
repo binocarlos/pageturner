@@ -105,6 +105,22 @@ Book.prototype.load3dPage = function(index, done){
   done && done()
 }
 
+Book.prototype.turnToPage = function(index, done){
+
+  var self = this;
+  function nextPage(){
+    if(self._currentPage==index){
+      done && done()
+      return;
+    }
+
+    var direction = index>self._currentPage ? 1 : -1
+    self.turnDirection(direction, nextPage)
+  }
+
+  nextPage()
+}
+
 Book.prototype.turnDirection = function(direction, done){
   var self = this;
   if(!this._active){

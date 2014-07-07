@@ -25,6 +25,8 @@
     <div id="buttons">
       <button id="prev">Prev Page</button>
       <button id="next">Next Page</button>
+      <button id="first">First Page</button>
+      <button id="last">Last Page</button>
     </div>
 
     <script src="build/build.js"></script>
@@ -45,6 +47,14 @@
 
       document.querySelector('#next').addEventListener('click', function(){
         book.turnDirection(1)
+      })
+
+      document.querySelector('#first').addEventListener('click', function(){
+        book.turnToPage(0)
+      })
+
+      document.querySelector('#last').addEventListener('click', function(){
+        book.turnToPage(2)
       })
       
     </script>
