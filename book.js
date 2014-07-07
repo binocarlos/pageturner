@@ -28,7 +28,6 @@ Book.prototype.setData = function(pageData){
 Book.prototype.setElement = function(elem){
   this._elem = elem
   this._leaves = this._elem.querySelector('#leaves')
-
   if(tools.is3d()){
     tools.setPerspective(this._leaves, this._options.perspective)  
   }
@@ -66,18 +65,20 @@ Book.prototype.getNextPageNumber = function(direction){
   return nextpage
 }
 
-Book.prototype.loadPage = function(index){
+Book.prototype.loadPage = function(index, done){
   this._currentPage = index
-  tools.is3d() ? this.load3dPage(index) : this.loadFlatPage(index)
+  tools.is3d() ? this.load3dPage(index, done) : this.loadFlatPage(index, done)
 }
 
-Book.prototype.loadFlatPage = function(index){
+Book.prototype.loadFlatPage = function(index, done){
   this._pages.forEach(function(page, i){
     page.setVisible(i==index)
   })
+  done && done()
 }
 
-Book.prototype.load3dPage = function(index){
+Book.prototype.load3dPage = function(index, done){
+  var self = this;
   var min = index - this._options.renderAhead
   var max = index + this._options.renderAhead
   if(min<0){
@@ -101,6 +102,7 @@ Book.prototype.load3dPage = function(index){
       page.remove()
     }
   })
+  done && done()
 }
 
 Book.prototype.turnDirection = function(direction, done){
