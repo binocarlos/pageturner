@@ -68,7 +68,7 @@ PageTurner.prototype.loadAndReplace = function(elem, pageSelector){
   elem.appendChild(this.render())
 }
 
-PageTurner.prototype.render = function(){
+PageTurner.prototype.render = function(target){
   var self = this;
 
   if(this.elem){
@@ -82,6 +82,11 @@ PageTurner.prototype.render = function(){
     tools.setPerspective(this.leaves, this.options.perspective)  
   }
 
+  if(target){
+    target.innerHTML = ''
+    target.appendChild(this.elem)
+  }
+
   return this.elem
 }
 
@@ -93,7 +98,6 @@ PageTurner.prototype.loadFlatPage = function(index){
 
 PageTurner.prototype.load3dPage = function(index){
   var self = this;
-  var renderAhead = 
   this.book.load3dPage(this.leaves, index, this.options.renderAhead)
 }
 

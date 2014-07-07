@@ -33,7 +33,10 @@
       var PageTurner = require('pageturner')
       var book = PageTurner()
 
-      book.loadAndReplace(document.querySelector('#mybook'), '.page')
+      var bookElem = document.querySelector('#mybook')
+
+      book.load(bookElem, '.page')
+      book.render(bookElem)
       book.loadPage(0)
 
       document.querySelector('#prev').addEventListener('click', function(){
