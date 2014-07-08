@@ -137,6 +137,8 @@ Book.prototype.turnToPage = function(index, done){
   }
 
   nextPage()
+
+  return index
 }
 
 Book.prototype.turnDirection = function(direction, done){
@@ -172,4 +174,6 @@ Book.prototype.turnDirection = function(direction, done){
       }
     })
   })
+
+  return nextpage
 }

@@ -88,13 +88,13 @@ PageTurner.prototype.loadPage = function(index){
 }
 
 PageTurner.prototype.turnDirection = function(direction, done){
-  this.book.turnDirection(direction, function(){
+  return this.book.turnDirection(direction, function(){
     done && done()
   })
 }
 
 PageTurner.prototype.turnToPage = function(index, done){
-  this.book.turnToPage(index, function(){
+  return this.book.turnToPage(index, function(){
     done && done()
   })
 }
