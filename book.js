@@ -59,7 +59,15 @@ Book.prototype.getLeaves = function(offset){
   return page.render()
 }
 
+var sideDirections = {
+  left:-1,
+  right:1
+}
+
 Book.prototype.getNextPageNumber = function(direction){
+  if(typeof(direction)==='string'){
+    direction = sideDirections[direction]
+  }
   var nextpage = this._currentPage + direction;
   if(nextpage<0){
     return -1

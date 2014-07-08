@@ -75,6 +75,8 @@ PageTurner.prototype.render = function(target){
   }
 
   writeBookToTarget(this.elem)
+
+  this.emit('render', this.elem)
   return this.elem
 }
 

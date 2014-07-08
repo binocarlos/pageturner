@@ -45,6 +45,10 @@ book.load(bookElem, '.page')
 book.render(bookElem)
 book.loadPage(0)
 
+book.on('render', function(elem){
+    console.log('book rendered')
+})
+
 book.on('page', function(index){
     console.log('viewing page: ' + index)
 })
