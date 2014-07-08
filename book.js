@@ -21,13 +21,15 @@ Emitter(Book.prototype)
 Book.prototype.setData = function(pageData){
   var self = this;
   pageData = pageData || []
-  this._pages = pageData.map(function(data){
+  this._pages = pageData.map(function(data, index){
     var page = Page(data)
-    page.on('render', function(leaf){
-      self.emit('render', leaf)
+    page.on('render', function(leaves){
+      self.emit('render:leaf', leaves.left, 'left', index)
+      self.emit('render:leaf', leaves.right, 'right', index)
     })
     return page
   })
+  this.emit('data', pageData)
 }
 
 Book.prototype.setElement = function(elem){
@@ -81,11 +83,11 @@ Book.prototype.getNextPageNumber = function(direction){
 Book.prototype.loadPage = function(index, done){
   this._currentPage = index
   tools.is3d() ? this.load3dPage(index, done) : this.loadFlatPage(index, done)
-  this.emit('page', index)
   var page = this._pages[index]
   var leaves = page.render()
-  this.emit('leaf', leaves.left)
-  this.emit('leaf', leaves.right)
+  this.emit('view:index', index)
+  this.emit('view:leaf', leaves.left, 'left', index)
+  this.emit('view:leaf', leaves.right, 'right', index)
 }
 
 Book.prototype.loadFlatPage = function(index, done){
@@ -154,6 +156,8 @@ Book.prototype.turnDirection = function(direction, done){
   var nextpage = this.getNextPageNumber(direction)
   var side = tools.directionToSide(direction)
 
+  this.emit('turn:start', this._currentPage, nextpage, direction)
+
   if(nextpage<0){
     done && done()
     return
@@ -169,6 +173,7 @@ Book.prototype.turnDirection = function(direction, done){
         self._finishfn = null
       }
       else{
+        self.emit('turn:end', self._currentPage, nextpage, direction)
         self._active = true
         done && done()
       }

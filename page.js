@@ -34,8 +34,7 @@ Page.prototype.render = function(){
     right:this.createLeaf('right')
   }
 
-  this.emit('render', this.leaves.left)
-  this.emit('render', this.leaves.right)
+  this.emit('render', this.leaves)
 
   return this.leaves
 }

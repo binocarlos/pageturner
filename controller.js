@@ -10,12 +10,37 @@ module.exports = PageTurner
 function PageTurner(options){
   this.options = options
   this.book = Book(this.options)
+  this.book.on('render:leaf', function(pages){
+    self.emit('load', pages)
+  })
   this.book.on('page', function(i){
     self.emit('page', i)
   })
 }
 
 Emitter(PageTurner.prototype)
+
+function sortArgs(a){
+  var args = Array.prototype.slice.call(a, 0);
+  return args.sort();
+}
+
+PageTurner.prototype.setupEvents = function(data, pageSelector){
+  var self = this;
+  [
+    'render:leaf',
+    'data',
+    'view:page',
+    'view:leaf',
+    'turn:start',
+    'turn:end'
+  ].forEach(function(name){
+    self.book.on('name', function(){
+      var args = sortArgs(arguments)
+      self.emit.apply(self, [name].concat(args))
+    })
+  })
+}
 
 // load either from a dom node or array of page objects with .html
 PageTurner.prototype.load = function(data, pageSelector){
@@ -81,7 +106,7 @@ PageTurner.prototype.render = function(target){
 
   writeBookToTarget(this.elem)
 
-  this.emit('render', this.elem)
+  this.emit('render:book', this.elem)
   return this.elem
 }
 

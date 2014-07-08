@@ -121,6 +121,40 @@ Cycle through pages until you get to the passed index.
 
 You can pass an overridden animTime to make the pages skip faster than usual.
 
+## events
+
+### `book.on('data', function(pages){})`
+
+called when data is loaded either from the DOM or from a passed array.
+
+pages is an array of POJO page descriptions (with a HTML property)
+
+### `book.on('render:book', function(element){})`
+
+the element for the book has been created and is passed
+
+### `book.on('render:leaf', function(element, side, index){})`
+
+A single half of a page (a leaf) has been rendered as a DOM element - the side is 'left' or 'right' and the index is the page number
+
+### `book.on('view:index', function(index){})`
+
+The given page number is currently viewable
+
+### `book.on('view:leaf', function(element, side, index){})`
+
+A single half of a page (a leaf) is now visible - the side is 'left' or 'right' and the index is the page number
+
+### `book.on('turn:start', function(currentPage, nextPage, direction){})`
+
+A page turn has started.  The currentPage is the page that was viewable and nextPage is the next index coming into view.
+
+Direction is 1 for a move forward and -1 for a move backwards action.
+
+### `book.on('turn:end', function(currentPage, nextPage, direction){})`
+
+A page turn has ended.  The parameters are the same as for the corresponding turn:start event
+
 ## ascii
 
 a single page turn = 2 leafs turning at the same time
