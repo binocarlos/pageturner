@@ -42,7 +42,7 @@ var book = PageTurner()
 var bookElem = document.querySelector('#mybook')
 
 book.load(bookElem, '.page')
-book.render(bookElem)
+book.appendTo(bookElem)
 book.loadPage(0)
 
 book.on('render', function(elem){
@@ -93,14 +93,16 @@ Load page data from a POJO array - each page object should have a 'html' propert
 
 You can also pass an array of strings where each string is the HTML for the page.
 
-### `book.render(target)`
+### `book.appendTo(target)`
 
 Get the DOM element for the book.  You can append this to an existing element or pass the target to append the book element onto.
 
 ```js
-document.querySelector('#myholder').appendChild(book.render())
+book.appendTo(document.querySelector('#myholder'))
 
-book.render(document.querySelector('#myholder'))
+// or
+
+book.appendTo('#myholder')
 ```
 
 ### `book.loadPage(index)`

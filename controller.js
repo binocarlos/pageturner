@@ -51,6 +51,11 @@ PageTurner.prototype.loadElement = function(elem, pageSelector){
   this.book.setData(pages)
 }
 
+PageTurner.prototype.appendTo = function (target) {
+  if (typeof target === 'string') target = document.querySelector(target)
+  target.appendChild(this.render())
+}
+
 PageTurner.prototype.render = function(target){
   var self = this;
 
