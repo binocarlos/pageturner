@@ -56,6 +56,10 @@ PageTurner.prototype.loadData = function(pageData){
   this.book.setData(pageData)
 }
 
+PageTurner.prototype.getPages = function(){
+  return this.book.pages()
+}
+
 // process the page divs so we have the HTML for them
 PageTurner.prototype.loadElement = function(elem, pageSelector){
   var pages = []

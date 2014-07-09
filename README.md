@@ -109,6 +109,10 @@ book.appendTo('#myholder')
 
 This will not animate the book but is used to immediately change the page that is viewable
 
+### `book.getPages()`
+
+Return an array of the current page objects
+
 ### `book.turnDirection(direction)`
 
 Pass 1 to move forward a page or -1 to move backwards a page.
