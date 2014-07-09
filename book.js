@@ -85,7 +85,7 @@ Book.prototype.loadPage = function(index, done){
   tools.is3d() ? this.load3dPage(index, done) : this.loadFlatPage(index, done)
   var page = this._pages[index]
   var leaves = page.render()
-  this.emit('view:index', index)
+  this.emit('view:index', index, this._pages.length)
   this.emit('view:leaf', leaves.left, 'left', index)
   this.emit('view:leaf', leaves.right, 'right', index)
 }

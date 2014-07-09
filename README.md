@@ -141,7 +141,7 @@ the element for the book has been created and is passed
 
 A single half of a page (a leaf) has been rendered as a DOM element - the side is 'left' or 'right' and the index is the page number
 
-### `book.on('view:index', function(index){})`
+### `book.on('view:index', function(index, pageCount){})`
 
 The given page number is currently viewable
 
