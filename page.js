@@ -69,21 +69,25 @@ Page.prototype.setLeafRotation = function(side, percent){
 
 
 Page.prototype.processMask = function(leaf, val, parent){
-  var size = {
-    width:parent.offsetWidth,
-    height:parent.offsetHeight
-  }
 
-  var usemask = arguments.length==2 ? val : 0;
+  setTimeout(function(){
+    var size = {
+      width:parent.offsetWidth,
+      height:parent.offsetHeight
+    }
 
-  // clip: rect(<top>, <right>, <bottom>, <left>);
-  var rect = leaf.getAttribute('data-side') == 'left' ? 
-    'rect(0px, ' + (Math.ceil(size.width/2)+usemask) + 'px, ' + (size.height) + 'px, 0px)' :
-    'rect(0px, ' + (size.width) + 'px, ' + (size.height) + 'px, ' + (Math.floor(size.width/2)-usemask) + 'px)'
+    var usemask = arguments.length==2 ? val : 0;
 
-  css(leaf, {
-    'clip':rect
-  })
+    // clip: rect(<top>, <right>, <bottom>, <left>);
+    var rect = leaf.getAttribute('data-side') == 'left' ? 
+      'rect(0px, ' + (Math.ceil(size.width/2)+usemask) + 'px, ' + (size.height) + 'px, 0px)' :
+      'rect(0px, ' + (size.width) + 'px, ' + (size.height) + 'px, ' + (Math.floor(size.width/2)-usemask) + 'px)'
+
+    css(leaf, {
+      'clip':rect
+    })
+  }, 1)
+  
 }
 
 
