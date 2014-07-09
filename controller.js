@@ -8,6 +8,7 @@ var Book = require('./book')
 module.exports = PageTurner
 
 function PageTurner(options){
+  var self = this;
   this.options = options
   this.book = Book(this.options)
   this.book.on('render:leaf', function(pages){
