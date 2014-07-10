@@ -149,6 +149,7 @@ Book.prototype.turnDirection = function(direction, done){
   var self = this;
   if(!this._active){
     this._finishfn = function(){
+      this._active = true
       self.turnDirection(direction, done)
     }
     return
