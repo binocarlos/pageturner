@@ -11,12 +11,7 @@ function PageTurner(options){
   var self = this;
   this.options = options
   this.book = Book(this.options)
-  this.book.on('render:leaf', function(pages){
-    self.emit('load', pages)
-  })
-  this.book.on('page', function(i){
-    self.emit('page', i)
-  })
+  this.setupEvents()
 }
 
 Emitter(PageTurner.prototype)
@@ -26,7 +21,7 @@ function sortArgs(a){
   return args.sort();
 }
 
-PageTurner.prototype.setupEvents = function(data, pageSelector){
+PageTurner.prototype.setupEvents = function(){
   var self = this;
   [
     'render:leaf',
@@ -36,8 +31,10 @@ PageTurner.prototype.setupEvents = function(data, pageSelector){
     'turn:start',
     'turn:end'
   ].forEach(function(name){
-    self.book.on('name', function(){
+    self.book.on(name, function(){
       var args = sortArgs(arguments)
+      console.log('-------------------------------------------');
+      console.dir(name)
       self.emit.apply(self, [name].concat(args))
     })
   })
