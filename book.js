@@ -2,6 +2,7 @@ var tools = require('./tools')
 var Emitter = require('emitter')
 var Animator = require('./animator')
 var Page = require('./page')
+var resize = require('resize')
 
 module.exports = factory
 
@@ -33,10 +34,19 @@ Book.prototype.setData = function(pageData){
 }
 
 Book.prototype.setElement = function(elem){
+  var self = this;
   this._elem = elem
   this._leaves = this._elem.querySelector('#leaves')
   if(tools.is3d()){
     tools.setPerspective(this._leaves, this._options.perspective)  
+    resize.bind(this._leaves, function(){
+      setTimeout(function(){
+        self._pages.forEach(function(page){
+          page.resize()
+        })  
+      }, 2)
+      
+    })
   }
 }
 
@@ -130,6 +140,7 @@ Book.prototype.load3dPage = function(index, done){
 Book.prototype.turnToPage = function(index, done){
 
   var self = this;
+
   function nextPage(){
     if(self._currentPage==index){
       done && done()

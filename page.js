@@ -91,14 +91,21 @@ Page.prototype.processMask = function(leaf, val, parent){
 }
 
 
+Page.prototype.resize = function(){
+  if(tools.is3d()){
+    var page = this.render()
+    this.processMask(page.left, 0, this._parent)
+    this.processMask(page.right, 0, this._parent)  
+  }
+}
+
 Page.prototype.attach = function(parent){
   var page = this.render()
   parent.appendChild(page.left)
-  parent.appendChild(page.right)
-
+  this._parent = parent
   if(tools.is3d()){
-    this.processMask(page.left, 0, parent)
-    this.processMask(page.right, 0, parent)
+    parent.appendChild(page.right)
+    this.resize()
   }
 }
 
@@ -114,11 +121,11 @@ Page.prototype.setVisible = function(mode){
   var leaves = this.render()
   css(leaves.left, {
     opacity:o,
-    'z-index':'0'
+    'z-index':mode ? 100 : 0
   })
   css(leaves.right, {
     opacity:o,
-    'z-index':'0'
+    'z-index':mode ? 100 : 0
   })
 }
 
