@@ -91,7 +91,9 @@ Book.prototype.loadPage = function(index, done){
 }
 
 Book.prototype.loadFlatPage = function(index, done){
+  var self = this;
   this._pages.forEach(function(page, i){
+    page.attach(self._leaves)
     page.setVisible(i==index)
   })
   done && done()
@@ -147,7 +149,6 @@ Book.prototype.turnDirection = function(direction, done){
   var self = this;
   if(!this._active){
     this._finishfn = function(){
-      console.log('run fuinish fn')
       self.turnDirection(direction, done)
     }
     return

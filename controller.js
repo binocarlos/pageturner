@@ -26,7 +26,7 @@ PageTurner.prototype.setupEvents = function(){
   [
     'render:leaf',
     'data',
-    'view:page',
+    'view:index',
     'view:leaf',
     'turn:start',
     'turn:end'
