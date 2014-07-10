@@ -45,15 +45,15 @@ book.load(bookElem, '.page')
 book.appendTo(bookElem)
 book.loadPage(0)
 
-book.on('render', function(elem){
+book.on('render:book', function(elem){
     console.log('book rendered')
 })
 
-book.on('page', function(index){
+book.on('view:index', function(index){
     console.log('viewing page: ' + index)
 })
 
-book.on('leaf', function(leafElement){
+book.on('render:leaf', function(leafElement, side, index){
     // leafElement is a one half page that is currently viewable  
 })
 
