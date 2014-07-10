@@ -33,8 +33,6 @@ PageTurner.prototype.setupEvents = function(){
   ].forEach(function(name){
     self.book.on(name, function(){
       var args = sortArgs(arguments)
-      console.log('-------------------------------------------');
-      console.dir(name)
       self.emit.apply(self, [name].concat(args))
     })
   })
