@@ -11,7 +11,8 @@
     "component/has-translate3d": "*",
     "juliangruber/prefixed": "*",
     "component/transform-property": "*",
-    "anthonyshort/after-transition": "*"
+    "anthonyshort/after-transition": "*",
+    "ramitos/resize": "*"
   },
   "development": {},
   "license": "MIT",
