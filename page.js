@@ -116,16 +116,25 @@ Page.prototype.remove = function(){
   page.right.parentNode.removeChild(page.right)
 }
 
+Page.prototype.setStack = function(mode){
+  var o = mode ? '1' : '0';
+  var leaves = this.render()
+  css(leaves.left, {
+    'z-index':o
+  })
+  css(leaves.right, {
+    'z-index':o
+  })
+}
+
 Page.prototype.setVisible = function(mode){
   var o = mode ? '1' : '0';
   var leaves = this.render()
   css(leaves.left, {
-    opacity:o,
-    'z-index':mode ? 100 : 0
+    opacity:o
   })
   css(leaves.right, {
-    opacity:o,
-    'z-index':mode ? 100 : 0
+    opacity:o
   })
 }
 

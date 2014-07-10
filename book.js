@@ -123,6 +123,7 @@ Book.prototype.load3dPage = function(index, done){
     if(i>=min && i<=max){
       page.attach(self._leaves)
       page.setVisible(i==index)
+      page.setStack(i==index)
       if(i>index){
         page.setRotation('left', 180)
       }
