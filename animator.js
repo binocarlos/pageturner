@@ -49,10 +49,6 @@ function animator(options){
     tools.setupAnimator(backleaf, 'before', options.animtime || 500, function(){
 
       tools.setZ(hideleaf, 0)
-
-      //self.load_page(self.currentpage + pageDirection)
-      //self.finish_animation(done)
-
       done()
       
     });

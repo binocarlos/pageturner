@@ -11,7 +11,7 @@ if(ua.indexOf('.net')>=0){
 }
 
 function is3d(){
-	return has3d && !ie
+  return has3d && !ie
 }
 
 function setLeafTransform(elem){
@@ -68,12 +68,12 @@ function setupAnimator(elem, sequence, ms, fn){
 }
 
 function removeAnimator(elem){
-	prefixed(elem.style, 'transition-timing-function', '')
-	prefixed(elem.style, 'transition', '')
+  prefixed(elem.style, 'transition-timing-function', '')
+  prefixed(elem.style, 'transition', '')
 }
 
 function setPerspective(elem, amount){
-	prefixed(elem.style, 'perspective', amount + 'px')
+  prefixed(elem.style, 'perspective', amount + 'px')
 }
 
 function directionToSide(direction){
@@ -85,12 +85,12 @@ function otherSide(side){
 }
 
 module.exports = {
-	is3d:is3d,
-	setupAnimator:setupAnimator,
-	removeAnimator:removeAnimator,
-	setPerspective:setPerspective,
-	setZ:setZ,
-	setRotation:setRotation,
+  is3d:is3d,
+  setupAnimator:setupAnimator,
+  removeAnimator:removeAnimator,
+  setPerspective:setPerspective,
+  setZ:setZ,
+  setRotation:setRotation,
   directionToSide:directionToSide,
   otherSide:otherSide
 }

@@ -142,17 +142,23 @@ Book.prototype.turnToPage = function(index, done){
 
   var self = this;
 
-  function nextPage(){
-    if(self._currentPage==index){
-      done && done()
-      return;
+  if(!tools.is3d()){
+    self.loadPage(index, done)
+  }
+  else{
+    function nextPage(){
+      if(self._currentPage==index){
+        done && done()
+        return;
+      }
+
+      var direction = index>self._currentPage ? 1 : -1
+      self.turnDirection(direction, nextPage)
     }
 
-    var direction = index>self._currentPage ? 1 : -1
-    self.turnDirection(direction, nextPage)
+    nextPage()    
   }
 
-  nextPage()
 
   return index
 }
@@ -178,9 +184,8 @@ Book.prototype.turnDirection = function(direction, done){
   }
 
   this._active = false
-  this._animator(side, function(i){
-    return self.getLeaves(i)
-  }, function(){
+
+  function loadNextPage(){
     self.loadPage(nextpage, function(){
       if(self._finishfn){
         self._finishfn()
@@ -192,7 +197,16 @@ Book.prototype.turnDirection = function(direction, done){
         done && done()
       }
     })
-  })
+  }
 
+  if(tools.is3d()){
+    this._animator(side, function(i){
+      return self.getLeaves(i)
+    }, loadNextPage)
+  }
+  else{
+    loadNextPage()
+  }
+  
   return nextpage
 }
