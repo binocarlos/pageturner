@@ -37,9 +37,11 @@ function setLeafTransform(elem){
   }
 }
 
-function setZ(elem, amount){
+function setZ(elem, amount, noWrite){
   elem._z = amount;
-  setLeafTransform(elem);
+  if(!noWrite){
+    setLeafTransform(elem);  
+  }
 }
 
 function setRotation(elem, amount){

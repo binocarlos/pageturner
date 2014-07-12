@@ -126,8 +126,10 @@ Book.prototype.load3dPage = function(index, done){
       page.setStack(i==index)
       if(i>index){
         page.setRotation('left', 180)
+        page.setRotation('right', 0)
       }
       else if(i<index){
+        page.setRotation('left', 0)
         page.setRotation('right', -180)
       }
     }
