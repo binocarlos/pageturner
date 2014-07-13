@@ -70,6 +70,9 @@ Page.prototype.setLeafRotation = function(side, percent){
 
 Page.prototype.processMask = function(leaf, val, parent){
 
+  if(!parent){
+    return;
+  }
   setTimeout(function(){
     var size = {
       width:parent.offsetWidth,
