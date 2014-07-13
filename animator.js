@@ -7,7 +7,16 @@ function animator(options){
 
   options = options || {}
 
-  return function(side, getLeaves, done){
+  return function(side, getLeaves, quickMode, done){
+
+    if(!done){
+      done = quickMode
+      quickMode = false
+    }
+
+    if(typeof quickMode =='boolean'){
+      quickMode = quickMode ? 300 : 0
+    }
 
     var otherside = tools.otherSide(side)
 
@@ -68,8 +77,10 @@ function animator(options){
         }
       }
 
-      tools.setupAnimator(frontleaf, 'before', options.animtime || 500, tryFinish)
-      tools.setupAnimator(backleaf, 'before', options.animtime || 500, tryFinish)
+      var animTime = quickMode ? 200 : (options.animtime || 500)
+
+      tools.setupAnimator(frontleaf, 'before', animTime, tryFinish)
+      tools.setupAnimator(backleaf, 'before', animTime, tryFinish)
 
       //tools.setZ(hideleaf, -1)
       //tools.setZ(nextleaf, -1)

@@ -155,7 +155,7 @@ Book.prototype.turnToPage = function(index, done){
       }
 
       var direction = index>self._currentPage ? 1 : -1
-      self.turnDirection(direction, nextPage)
+      self.turnDirection(direction, true, nextPage)
     }
 
     nextPage()    
@@ -165,8 +165,14 @@ Book.prototype.turnToPage = function(index, done){
   return index
 }
 
-Book.prototype.turnDirection = function(direction, done){
+Book.prototype.turnDirection = function(direction, quickMode, done){
   var self = this;
+
+  if(!done){
+    done = quickMode
+    quickMode = false
+  }
+
   if(!this._active){
     this._finishfn = function(){
       this._active = true
@@ -204,7 +210,7 @@ Book.prototype.turnDirection = function(direction, done){
   if(tools.is3d()){
     this._animator(side, function(i){
       return self.getLeaves(i)
-    }, loadNextPage)
+    }, quickMode, loadNextPage)
   }
   else{
     loadNextPage()
