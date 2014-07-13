@@ -130,12 +130,17 @@ Page.prototype.setStack = function(mode){
 Page.prototype.setVisible = function(mode){
   var o = mode ? '1' : '0';
   var leaves = this.render()
-  css(leaves.left, {
-    opacity:o
-  })
-  css(leaves.right, {
-    opacity:o
-  })
+
+  var props = {}
+
+  if(tools.is3d()){
+    props.opacity = o
+  }
+  else{
+    props.display = mode ? 'block' : 'none'
+  }
+  css(leaves.left, props)
+  css(leaves.right, props)
 }
 
 Page.prototype.setRotation = function(side, amount){
