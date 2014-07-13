@@ -112,8 +112,12 @@ Page.prototype.attach = function(parent){
 
 Page.prototype.remove = function(){
   var page = this.render()
-  page.left.parentNode.removeChild(page.left)
-  page.right.parentNode.removeChild(page.right)
+  if(page.left.parentNode){
+    page.left.parentNode.removeChild(page.left)  
+  }
+  if(page.right.parentNode){
+    page.right.parentNode.removeChild(page.right)
+  }
 }
 
 Page.prototype.setStack = function(mode){
