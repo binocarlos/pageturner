@@ -76,24 +76,24 @@ document.querySelector('#last').addEventListener('click', function(){
 
 ## api
 
-### `var book = PageTurner(options)`
+#### `var book = PageTurner(options)`
 
 Create a new book with the following options:
 
  * startPage (0) - the page to start on
  * renderAhead (3) - the number of pages to render ahead/behind the current page
 
-### `book.load(domElement, pageSelector)`
+#### `book.load(domElement, pageSelector)`
 
 Load page data from a DOM element - each page html will be slurped from the DOM elements within 'domElement' and matching 'pageSelector'
 
-### `book.load(pageDataArray)`
+#### `book.load(pageDataArray)`
 
 Load page data from a POJO array - each page object should have a 'html' property.
 
 You can also pass an array of strings where each string is the HTML for the page.
 
-### `book.appendTo(target)`
+#### `book.appendTo(target)`
 
 Get the DOM element for the book.  You can append this to an existing element or pass the target to append the book element onto.
 
@@ -105,21 +105,21 @@ book.appendTo(document.querySelector('#myholder'))
 book.appendTo('#myholder')
 ```
 
-### `book.loadPage(index)`
+#### `book.loadPage(index)`
 
 This will not animate the book but is used to immediately change the page that is viewable
 
-### `book.getPages()`
+#### `book.getPages()`
 
 Return an array of the current page objects
 
-### `book.turnDirection(direction)`
+#### `book.turnDirection(direction)`
 
 Pass 1 to move forward a page or -1 to move backwards a page.
 
 This will have no effect if the new page is outside boundaries (<0 || >pages.length)
 
-### `book.turnToPage(index, animTime)`
+#### `book.turnToPage(index, animTime)`
 
 Cycle through pages until you get to the passed index.
 
@@ -127,35 +127,35 @@ You can pass an overridden animTime to make the pages skip faster than usual.
 
 ## events
 
-### `book.on('data', function(pages){})`
+#### `book.on('data', function(pages){})`
 
 called when data is loaded either from the DOM or from a passed array.
 
 pages is an array of POJO page descriptions (with a HTML property)
 
-### `book.on('render:book', function(element){})`
+#### `book.on('render:book', function(element){})`
 
 the element for the book has been created and is passed
 
-### `book.on('render:leaf', function(element, side, index){})`
+#### `book.on('render:leaf', function(element, side, index){})`
 
 A single half of a page (a leaf) has been rendered as a DOM element - the side is 'left' or 'right' and the index is the page number
 
-### `book.on('view:index', function(index, pageCount){})`
+#### `book.on('view:index', function(index, pageCount){})`
 
 The given page number is currently viewable
 
-### `book.on('view:leaf', function(element, side, index){})`
+#### `book.on('view:leaf', function(element, side, index){})`
 
 A single half of a page (a leaf) is now visible - the side is 'left' or 'right' and the index is the page number
 
-### `book.on('turn:start', function(currentPage, nextPage, direction){})`
+#### `book.on('turn:start', function(currentPage, nextPage, direction){})`
 
 A page turn has started.  The currentPage is the page that was viewable and nextPage is the next index coming into view.
 
 Direction is 1 for a move forward and -1 for a move backwards action.
 
-### `book.on('turn:end', function(currentPage, nextPage, direction){})`
+#### `book.on('turn:end', function(currentPage, nextPage, direction){})`
 
 A page turn has ended.  The parameters are the same as for the corresponding turn:start event
 
