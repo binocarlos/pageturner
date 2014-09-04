@@ -111,8 +111,8 @@ Book.prototype.loadFlatPage = function(index, done){
 
 Book.prototype.load3dPage = function(index, done){
   var self = this;
-  var min = index - this._options.renderAhead
-  var max = index + this._options.renderAhead
+  var min = index - Math.ceil(this._options.renderAhead/2)
+  var max = index + Math.ceil(this._options.renderAhead/2)
   if(min<0){
     min = 0
   }
@@ -121,9 +121,9 @@ Book.prototype.load3dPage = function(index, done){
   }
   this._pages.forEach(function(page, i){
     if(i>=min && i<=max){
-      page.attach(self._leaves)
       page.setVisible(i==index)
       page.setStack(i==index)
+      page.attach(self._leaves)
       if(i>index){
         page.setRotation('left', 180)
         page.setRotation('right', 0)
@@ -137,6 +137,8 @@ Book.prototype.load3dPage = function(index, done){
       page.remove()
     }
   })
+  var activePage = this._pages[index]
+  activePage.attach(self._leaves)
   done && done()
 }
 
