@@ -41,7 +41,7 @@ Page.prototype.render = function(){
 
 
 Page.prototype.createLeaf = function(side){
-  var leaf = domify('<div class="leaf nobackside filler"><div class="content filler">' + this._html + '</div></div>')
+  var leaf = domify('<div class="leaf nobackside filler maintain3d"><div class="content filler">' + this._html + '</div></div>')
   leaf.setAttribute('data-side', side)
   return leaf;
 }
