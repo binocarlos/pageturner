@@ -139,8 +139,8 @@ Book.prototype.load3dPage = function(index, done){
     }
   })
   var activePage = this._pages[index]
-  activePage.setVisible(false)
-  activePage.setStack(false)
+  activePage.setVisible(true)
+  activePage.setStack(true)
   activePage.attach(self._leaves)
   activePage.setRotation('left', 180)
   activePage.setRotation('right', 0)
