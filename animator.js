@@ -23,7 +23,6 @@ function animator(options){
     var frontRotation = 0;
     var pageDirection = 0;
 
-    var afterFrontRotation = 0
     var thisLeaves = getLeaves()
     var lastLeaves = getLeaves(-1)
     var nextLeaves = getLeaves(1)
@@ -37,9 +36,8 @@ function animator(options){
       nextleaf = lastLeaves.left
 
       pageDirection = -1;
-      frontRotation = afterFrontRotation = 180
-      backRotation = 0.1
-      afterBackRotation = 0
+      frontRotation = 175
+      backRotation = -5
 
     }
     else{
@@ -50,9 +48,8 @@ function animator(options){
       nextleaf = nextLeaves.right;
 
       pageDirection = 1;
-      frontRotation = -179.9
-      backRotation = afterBackRotation = 0
-      afterFrontRotation = -180
+      frontRotation = -175
+      backRotation = 5
     }
 
     frontleaf.parentNode.appendChild(frontleaf)
@@ -65,8 +62,6 @@ function animator(options){
       function doFinish(){
         tools.removeAnimator(frontleaf)
         tools.removeAnimator(backleaf)
-        tools.setRotation(backleaf, afterBackRotation)
-        tools.setRotation(frontleaf, afterFrontRotation)
         done()
       }
 
