@@ -36,8 +36,8 @@ function animator(options){
       nextleaf = lastLeaves.left
 
       pageDirection = -1;
-      frontRotation = 175
-      backRotation = -5
+      frontRotation = 179
+      backRotation = -1
 
     }
     else{
@@ -48,8 +48,8 @@ function animator(options){
       nextleaf = nextLeaves.right;
 
       pageDirection = 1;
-      frontRotation = -175
-      backRotation = 5
+      frontRotation = -179
+      backRotation = 1
     }
 
     frontleaf.parentNode.appendChild(frontleaf)
