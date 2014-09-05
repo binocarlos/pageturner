@@ -109,6 +109,7 @@ Book.prototype.loadFlatPage = function(index, done){
   done && done()
 }
 
+
 Book.prototype.load3dPage = function(index, done){
   var self = this;
   var min = index - Math.ceil(this._options.renderAhead/2)
