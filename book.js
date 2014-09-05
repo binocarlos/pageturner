@@ -142,6 +142,7 @@ Book.prototype.load3dPage = function(index, done){
   activePage.setVisible(true)
   activePage.setStack(true)
   activePage.attach(self._leaves)
+  
   activePage.setRotation('left', 0)
   activePage.setRotation('right', 0)
   done && done()
